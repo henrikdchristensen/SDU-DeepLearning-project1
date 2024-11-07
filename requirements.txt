@@ -1,0 +1,6 @@
+numpy==2.1.2
+matplotlib==3.9.2
+ipykernel==6.29.5
+-i https://download.pytorch.org/whl/cu124
+torch
+torchvision
