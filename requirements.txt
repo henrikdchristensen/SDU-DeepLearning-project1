@@ -1,6 +1,9 @@
-numpy==2.1.2
-matplotlib==3.9.2
-ipykernel==6.29.5
+matplotlib
+ipykernel
 -i https://download.pytorch.org/whl/cu124
+-i https://pypi.org/simple
 torch
 torchvision
+seaborn
+numpy
+tqdm
