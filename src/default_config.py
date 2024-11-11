@@ -1,5 +1,5 @@
 image_size = 200
-batch_size = 64
+batch_size = 32
 num_workers = 8
 pin_memory = True
 normalize_mean = [0.485, 0.456, 0.406]
