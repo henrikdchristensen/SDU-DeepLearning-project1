@@ -1,10 +1,9 @@
-matplotlib
+matplotlib==3.9.2
+pillow==10.2.0
 ipykernel
--i https://download.pytorch.org/whl/cu124
--i https://pypi.org/simple
-torch
-torchvision
-seaborn
-numpy
-tqdm
-torchinfo
+seaborn==0.13.2
+numpy==1.26.3
+torchinfo==1.8.0
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch==2.5.1+cu124
+torchvision==0.20.1+cu124
