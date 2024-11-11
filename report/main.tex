@@ -1,0 +1,48 @@
+% % LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.21 of 2022/01/12
+%
+\documentclass[runningheads]{llncs}
+%
+\usepackage[T1]{fontenc}
+% T1 fonts will be used to generate the final print and online PDFs,
+% so please use T1 fonts in your manuscript whenever possible.
+% Other font encondings may result in incorrect characters.
+%
+
+\usepackage{amsmath}
+\usepackage{todonotes}
+
+\usepackage{graphicx, color, float, subfig}
+\captionsetup{font=small,labelfont=bf,labelsep=period,skip=5pt}
+\captionsetup[subfloat]{font=scriptsize,labelfont=bf,skip=5pt}
+
+%
+\usepackage{hyperref}
+\renewcommand\UrlFont{\color{blue}\rmfamily}
+\urlstyle{rm}
+%
+
+\begin{document}
+\title{\fontsize{12}{12}\selectfont Project 1 - Cat \& Dog Classification}
+\titlerunning{Project 1}
+%
+\author{Henrik Daniel Christensen\orcidID{hench13@student.sdu.dk} \\Frode Engtoft Johansen\orcidID{fjoha21@student.sdu.dk}}
+\authorrunning{Christensen, Johansen} % first names are abbreviated in the running head.
+%
+\institute{University of Southern Denmark, SDU\\\textit{Department of Mathematics and Computer Science}}
+%
+\maketitle % typeset the header of the contribution
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{sections/1_introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\input{base/credits}
+
+
+\bibliographystyle{base/splncs04}
+\newpage
+\bibliography{base/references}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
