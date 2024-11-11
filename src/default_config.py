@@ -52,11 +52,13 @@ default_train_config = {
 default_net_config = {
     "in_channels": 3,
     "num_classes": 2,
+    "type": "CNN",
     "cv_layers": [
         {"out_channels": 16, "kernel_size": 3, "stride": 1, "padding": 1, "batchNorm": False, "maxPool": 0, "maxPool_stride": 1},
         {"out_channels": 32, "kernel_size": 3, "stride": 1, "padding": 1, "batchNorm": False, "maxPool": 0, "maxPool_stride": 1},
     ],
     "fc_layers": [{"out_features": 64, "batchNorm": False, "dropout_rate": 0.0}],
+    "blocks": [2, 2, 2, 2]
 }
 
 default_config = {
