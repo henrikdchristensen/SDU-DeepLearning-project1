@@ -104,5 +104,4 @@ class ConvolutionalNetwork(nn.Module):
         x = self.cv_layers(x) # pass through convolutional layers
         x = x.flatten(start_dim=1, end_dim=-1) # flatten tensor from convolutional layers for the linear fully connected layers
         x = self.fc_layers(x) # pass through fully connected layers
-        x = torch.softmax(x, dim=1) # apply softmax activation to get probabilities
         return x
