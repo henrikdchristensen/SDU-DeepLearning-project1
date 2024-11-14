@@ -12,6 +12,11 @@
 \usepackage{amsmath}
 \usepackage{todonotes}
 
+\usepackage[left=2cm,
+            right=2cm,
+            top=2cm,
+            bottom=2cm]{geometry}
+
 \usepackage{graphicx, color, float, subfig}
 \captionsetup{font=small,labelfont=bf,labelsep=period,skip=5pt}
 \captionsetup[subfloat]{font=scriptsize,labelfont=bf,skip=5pt}
@@ -35,11 +40,21 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{sections/1_introduction}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{sections/2_explorative_analysis}
+\input{sections/3_data_augmentation}
+\input{sections/4_model}
+\input{sections/5_training_and_tuning}
+\input{sections/6_results}
+\input{sections/7_pretrained_model}
+\input{sections/8_discussion}
+\input{sections/9_conclusion}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{base/credits}
 
+%Appendices
+\appendix
+\input{appendices/a_code}
+\input{appendices/b_notebook}
 
 \bibliographystyle{base/splncs04}
 \newpage
