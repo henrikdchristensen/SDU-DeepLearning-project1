@@ -119,13 +119,20 @@ def train_model(model, device, config=default_config):
     total_training_time = time.time() - total_start_time
     print(f"Training Time: {total_training_time:.2f}s")
     
-    # Save model statistics to file
-    with open(f"models/{label}.txt", "w") as f:
-        model_summary = summary(model, input_size=(batch_size, 3, image_size, image_size), verbose=0)
-        f.write(str(model_summary))
+    # Save model and metrics to file
+    if config["store_results"]:
+        with open(f"models/{label}.txt", "w") as f:
+            model_summary = summary(model, input_size=(batch_size, 3, image_size, image_size), verbose=0)
+            f.write(str(model_summary))
+            f.write("\nTraining and Validation Metrics:\n")
+            f.write(f"Train Losses: {train_losses}\n")
+            f.write(f"Train Accuracies: {train_accuracies}\n")
+            f.write(f"Val Losses: {val_losses}\n")
+            f.write(f"Val Accuracies: {val_accuracies}\n")
     
     # Save model to file
-    torch.save(model.state_dict(), f"models/{label}.pth")
+    if config["store_model"]:
+        torch.save(model.state_dict(), f"models/{label}.pth")
     
     return {
         "n_epochs": n_epochs,
