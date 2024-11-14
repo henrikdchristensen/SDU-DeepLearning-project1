@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 from loaders import get_val_loader
 from denormalize_image import denormalize_image
-from default_config import image_size, label_map
+from default_config import label_map
 
 def plot_predictions(model, model_path, device, num_images):
     # Load model

@@ -34,7 +34,11 @@ def train_model(model, device, config=default_config):
     if optimizer_type == 'SGD':
         optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum, weight_decay=weight_decay)
     elif optimizer_type == 'Adam':
-        optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+        # If weight decay is specified, apply AdamW instead
+        if weight_decay > 0:
+            optimizer = optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+        else:
+            optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     
     # Scheduler
     if step_size is not None and gamma is not None:
