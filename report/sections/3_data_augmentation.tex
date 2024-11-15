@@ -1,2 +1,15 @@
 \section{Data Augmentation}
-hej
+We chose to augment the data in a few different ways since we want to generalize the data so the important features remain. 
+Augmented data means that the model can rely less on coincidences and has to rely more on actual features, which means that it will get better results when faced with new images. In other words, it reduces overfitting.
+
+The images are of varying quality and taken in different lighting, and this is also what we can expect from the validation data.
+For this reason we change the brightness, saturation, contrast, and hue. This should make it easier for the model to find common features between different images, and make it better at recognising dogs and cats in pictures of varying quality.
+
+The pictures are taken from different angles so we rotate the pictures slightly and flip them horizontally. We don't want to rotate the pictures too much as it is unlikely for a picture to have a cat or dog at an angle of more than 45 degrees.
+Since the animals in most of the pictures are not entirely vertical we deemed 10 degrees to be good enough.
+
+The pictures are also cropped differently, some are of the face, and some of the full body, so we crop the pictures a bit to make the model better at recognising cats and dogs at different croppings.
+
+Even though some of the pictures are more blurry than others, we chose to not use blurring as data augmentation, as it effectively just reduces the data of the image without reducing input to the model.
+
+Since the training dataset is quite small, we wanted to create more data by reusing the same images but with random augmentations, but in the end we found out that our results did not improve from this.
