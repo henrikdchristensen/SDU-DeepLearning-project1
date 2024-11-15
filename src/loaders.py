@@ -3,7 +3,8 @@ from torch.utils.data import DataLoader
 from default_config import image_size, batch_size, num_workers, pin_memory, normalize_mean, normalize_std, default_transform_config, train_dir, val_dir
 
 def get_train_loader(transform_config=default_transform_config):
-    flip = transform_config["flip"]
+    hflip = transform_config["hflip"]
+    vflip = transform_config["vflip"]
     rotation = transform_config["rotation"]
     crop_scale = transform_config["crop_scale"]
     brightness_jitter = transform_config["brightness_jitter"]
@@ -16,8 +17,10 @@ def get_train_loader(transform_config=default_transform_config):
     transform_list = [transforms.Resize((image_size, image_size))] # always resizing
 
     # Add transformations
-    if flip:
+    if hflip:
         transform_list.append(transforms.RandomHorizontalFlip(p=0.5))
+    if vflip:
+        transform_list.append(transforms.RandomVerticalFlip(p=0.5))
     if rotation > 0:
         transform_list.append(transforms.RandomRotation(rotation))
     if crop_scale < 1.0:
@@ -58,7 +61,7 @@ def get_train_loader(transform_config=default_transform_config):
                                 pin_memory=pin_memory)
     return train_loader
 
-def get_val_loader():
+def get_test_loader():
     val_transform = transforms.Compose([
         transforms.Resize((image_size, image_size)),
         transforms.ToTensor(),

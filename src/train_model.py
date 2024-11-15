@@ -1,5 +1,5 @@
 from default_config import default_config, batch_size, image_size
-from loaders import get_train_loader, get_val_loader
+from loaders import get_train_loader, get_test_loader
 from torchinfo import summary
 import torch
 import torch.nn as nn
@@ -28,7 +28,7 @@ def train_model(model, device, config=default_config):
     
     # Get transformations
     train_loader = get_train_loader(transform_config)
-    val_loader = get_val_loader()
+    val_loader = get_test_loader()
 
     # Select optimizer
     if optimizer_type == 'SGD':
@@ -90,58 +90,49 @@ def train_model(model, device, config=default_config):
         
         # Training set statistics
         train_losses.append(train_loss / len(train_loader))
-        train_accuracy = 100 * correct / total if total > 0 else 0
-        train_accuracies.append(train_accuracy)
+        train_accuracies.append((100 * correct / total) if total > 0 else 0)
 
         # Evaluation on validation set
-        model.eval() # set model to evaluation mode
+        model.eval()  # set model to evaluation mode
         val_loss = 0.0
         correct = 0
         total = 0
-        with torch.no_grad(): # no need to calculate gradients for validation set
+        
+        with torch.no_grad():  # no need to calculate gradients for validation set
             for images, labels in val_loader:
-                images, labels = images.to(device), labels.to(device) # move data to device
+                images, labels = images.to(device), labels.to(device)  # move data to device
                 outputs = model(images)
-                loss = criterion(outputs, labels) # calculate loss
-                val_loss += loss.item() # add the loss to the validation set loss
-                _, predicted = torch.max(outputs, 1) # get predicted class
+                loss = criterion(outputs, labels)  # calculate loss
+                val_loss += loss.item()  # add the loss to the validation set loss
+                _, predicted = torch.max(outputs, 1)  # get predicted class
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
-        
+
         # Validation set statistics
         val_losses.append(val_loss / len(val_loader))
-        val_accuracy = 100 * correct / total
-        val_accuracies.append(val_accuracy)
+        val_accuracies.append((100 * correct / total) if total > 0 else 0)
 
         # Print epoch summary
         end_time = time.time()
         epoch_duration = end_time - start_time
-        print(f"Epoch {epoch+1}/{n_epochs} | Train Loss: {train_losses[-1]:.4f} (acc. {train_accuracy:.2f}%) | "
-              f"Val Loss: {val_losses[-1]:.4f} (acc. {val_accuracy:.2f}%) | Time: {epoch_duration:.2f}s")
-    
-    # Calculate and print total training time
-    total_training_time = time.time() - total_start_time
-    print(f"Training Time: {total_training_time:.2f}s")
-    
+        print(f"Epoch {epoch+1}/{n_epochs} | Train Loss: {train_losses[-1]} (acc. {train_accuracies[-1]}%) | "
+            f"Val Loss: {val_losses[-1]} (acc. {val_accuracies[-1]}%) | Time: {epoch_duration:.2f}s")
+
+        # Calculate and print total training time
+        total_training_time = time.time() - total_start_time
+        print(f"Training Time: {total_training_time:.2f}s")
+
     # Save model and metrics to file
-    if config["store_results"]:
-        with open(f"models/{label}.txt", "w") as f:
-            model_summary = summary(model, input_size=(batch_size, 3, image_size, image_size), verbose=0)
-            f.write(str(model_summary))
-            f.write("\nTraining and Validation Metrics:\n")
-            f.write(f"Train Losses: {train_losses}\n")
-            f.write(f"Train Accuracies: {train_accuracies}\n")
-            f.write(f"Val Losses: {val_losses}\n")
-            f.write(f"Val Accuracies: {val_accuracies}\n")
+    with open(f"models/{label}.txt", "w") as f:
+        model_summary = summary(model, input_size=(batch_size, 3, image_size, image_size), verbose=0)
+        f.write(str(model_summary))
+        f.write("\nTraining and Validation Metrics:\n")
+        f.write(f"Train Losses: {train_losses}\n")
+        f.write(f"Train Accuracies: {train_accuracies}\n")
+        f.write(f"Val Losses: {val_losses}\n")
+        f.write(f"Val Accuracies: {val_accuracies}\n")
     
     # Save model to file
-    if config["store_model"]:
-        torch.save(model.state_dict(), f"models/{label}.pth")
+    torch.save(model.state_dict(), f"models/{label}.pth")
     
-    return {
-        "n_epochs": n_epochs,
-        "train_losses": train_losses,
-        "val_losses": val_losses,
-        "train_accuracies": train_accuracies,
-        "val_accuracies": val_accuracies
-    }
+    plot_scores(results2)
