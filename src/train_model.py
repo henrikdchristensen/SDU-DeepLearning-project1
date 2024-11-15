@@ -89,8 +89,8 @@ def train_model(model, device, config=default_config):
             scheduler.step() # update learning rate
         
         # Training set statistics
-        train_losses.append(train_loss / len(train_loader))
-        train_accuracies.append((100 * correct / total) if total > 0 else 0)
+        train_losses.append(round(train_loss / len(train_loader), 4))
+        train_accuracies.append(round(100 * correct / total, 2) if total > 0 else 0)
 
         # Evaluation on validation set
         model.eval()  # set model to evaluation mode
@@ -109,18 +109,18 @@ def train_model(model, device, config=default_config):
                 correct += (predicted == labels).sum().item()
 
         # Validation set statistics
-        val_losses.append(val_loss / len(val_loader))
-        val_accuracies.append((100 * correct / total) if total > 0 else 0)
+        val_losses.append(round(val_loss / len(val_loader), 4))
+        val_accuracies.append(round(100 * correct / total, 2) if total > 0 else 0)
 
         # Print epoch summary
         end_time = time.time()
         epoch_duration = end_time - start_time
         print(f"Epoch {epoch+1}/{n_epochs} | Train Loss: {train_losses[-1]} (acc. {train_accuracies[-1]}%) | "
             f"Val Loss: {val_losses[-1]} (acc. {val_accuracies[-1]}%) | Time: {epoch_duration:.2f}s")
-
-        # Calculate and print total training time
-        total_training_time = time.time() - total_start_time
-        print(f"Training Time: {total_training_time:.2f}s")
+    
+    # Calculate and print total training time
+    total_training_time = time.time() - total_start_time
+    print(f"Training Time: {total_training_time:.2f}s")
 
     # Save model and metrics to file
     with open(f"models/{label}.txt", "w") as f:
@@ -134,5 +134,3 @@ def train_model(model, device, config=default_config):
     
     # Save model to file
     torch.save(model.state_dict(), f"models/{label}.pth")
-    
-    plot_scores(results2)
