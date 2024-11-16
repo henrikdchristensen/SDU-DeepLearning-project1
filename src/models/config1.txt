@@ -49,7 +49,7 @@ Params size (MB): 53.07
 Estimated Total Size (MB): 3174.82
 ==========================================================================================
 Training and Validation Metrics:
-Train Losses: [0.7307, 0.6479]
-Train Accuracies: [55.6, 63.2]
-Val Losses: [0.6533, 0.6672]
-Val Accuracies: [60.5, 63.5]
+Train Losses: [0.73, 0.6533]
+Train Accuracies: [56.0, 62.9]
+Val Losses: [0.6558, 0.6496]
+Val Accuracies: [61.5, 64.67]

@@ -109,16 +109,20 @@ def predict(model, device, model_path, results_file="image_probabilities.csv"):
     total_correct = len(correctly_classified)
     total_misclassified = len(misclassified)
     total = total_correct + total_misclassified
-    accuracy = (total_correct / total) * 100
-    print(f"Total Correctly Classified: {total_correct} | Total Misclassified: {total_misclassified} | Accuracy: {accuracy:.2f}%")
+    accuracy = round((total_correct / total) * 100, 2)
+    total_cats = correct_class_counts['cat'] + misclass_class_counts['cat']
+    total_dogs = correct_class_counts['dog'] + misclass_class_counts['dog']
+    cat_acc = round(correct_class_counts['cat'] / total_cats * 100, 2)
+    dog_acc = round(correct_class_counts['dog'] / total_dogs * 100, 2)
+    print(f"Total Correctly Classified: {total_correct} | Total Misclassified: {total_misclassified} | Accuracy: {accuracy}%")
     
     # Print class-wise statistics
-    print("\nClass-wise Correctly Classified Counts:")
+    print("Class-wise Correctly Classified Counts:")
     for label, count in correct_class_counts.items():
-        print(f"Class {label}: {count}")
-
-    print("\nClass-wise Misclassified Counts:")
+        print(f"- Class {label}: {count}")
+    print("Class-wise Misclassified Counts:")
     for label, count in misclass_class_counts.items():
-        print(f"Class {label}: {count}")
+        print(f"- Class {label}: {count}")
+    print(f"Cat Accuracy: {cat_acc}% | Dog Accuracy: {dog_acc}%")
         
     plot_classified_and_misclassified(correctly_classified, misclassified)
