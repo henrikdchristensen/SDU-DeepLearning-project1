@@ -56,8 +56,7 @@ default_net_config = {
         {"out_channels": 16, "kernel_size": 3, "stride": 1, "padding": 1, "batch_norm": False, "max_pool": 0, "max_pool_stride": 1},
         {"out_channels": 32, "kernel_size": 3, "stride": 1, "padding": 1, "batch_norm": False, "max_pool": 0, "max_pool_stride": 1},
     ],
-    "fc_layers": [{"out_features": 64, "batch_norm": False, "dropout_rate": 0}],
-    "blocks": [2, 2, 2, 2]
+    "fc_layers": [{"out_features": 64, "batch_norm": False, "dropout_rate": 0}]
 }
 
 default_config = {

@@ -72,15 +72,15 @@ def test_transform():
         transforms.Normalize(mean=normalize_mean, std=normalize_std)
     ])
 
-def get_val_loader():
-    val_transform = test_transform()
+def get_test_loader(dir):
+    test_transform = test_transform()
     
-    val_data = datasets.ImageFolder(val_dir, transform=val_transform)
+    test_data = datasets.ImageFolder(dir, transform=test_transform)
     
-    val_loader = DataLoader(val_data, 
+    test_loader = DataLoader(test_data, 
                                 batch_size=batch_size,
                                 shuffle=False, 
                                 num_workers=num_workers,
                                 pin_memory=pin_memory)
     
-    return val_loader
+    return test_loader

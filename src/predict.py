@@ -1,9 +1,9 @@
 import torch
 import matplotlib.pyplot as plt
 from collections import defaultdict
-from loaders import get_val_loader
+from loaders import get_test_loader
 from denormalize_image import denormalize_image
-from default_config import label_map
+from default_config import label_map, test_dir
 import csv
 
 def plot_classified_and_misclassified(correctly_classified, misclassified):
@@ -52,8 +52,8 @@ def predict(model, device, model_path, results_file="image_probabilities.csv"):
     model.load_state_dict(torch.load(model_path, weights_only=True))
     model.eval()
     
-    # Get validation loader
-    test_loader = get_val_loader()
+    # Get loader
+    test_loader = get_test_loader(test_dir)
     
     misclassified = []
     correctly_classified = []

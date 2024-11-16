@@ -1,5 +1,5 @@
-from default_config import default_config, batch_size, image_size
-from loaders import get_train_loader, get_val_loader
+from default_config import default_config, batch_size, image_size, val_dir
+from loaders import get_train_loader, get_test_loader
 import time
 import torch
 import torch.nn as nn
@@ -28,7 +28,7 @@ def train_model(model, device, config=default_config):
     
     # Get transformations
     train_loader = get_train_loader(transform_config)
-    val_loader = get_val_loader()
+    val_loader = get_test_loader(val_dir)
 
     # Select optimizer
     if optimizer_type == 'SGD':
