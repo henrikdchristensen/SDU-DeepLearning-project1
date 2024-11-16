@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 import torch
 from PIL import Image
-from loaders import test_transform
+from loaders import get_test_transform
 
 def plot_summed_feature_maps(model, device, img_path, output_file="feature_maps.png"):
     # Preprocess the image
     img = Image.open(img_path).convert("RGB")
-    transform = test_transform()
-    img = transform(img).unsqueeze(0).to(device)  # Apply transforms and add batch dimension
+    test_transform = get_test_transform()
+    img = test_transform(img).unsqueeze(0).to(device) # apply transforms and add batch dimension
 
     # Set model to evaluation mode and move to correct device
     model.eval()

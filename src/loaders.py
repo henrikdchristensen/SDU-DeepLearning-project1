@@ -65,7 +65,7 @@ def get_train_loader(transform_config=default_transform_config):
                                 pin_memory=pin_memory)
     return train_loader
 
-def test_transform():
+def get_test_transform():
     return transforms.Compose([
         transforms.Resize((image_size, image_size)),
         transforms.ToTensor(),
@@ -73,7 +73,7 @@ def test_transform():
     ])
 
 def get_test_loader(dir):
-    test_transform = test_transform()
+    test_transform = get_test_transform()
     
     test_data = datasets.ImageFolder(dir, transform=test_transform)
     
