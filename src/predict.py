@@ -1,19 +1,59 @@
 import torch
 import matplotlib.pyplot as plt
 from collections import defaultdict
-from loaders import get_test_loader
+from loaders import get_val_loader
 from denormalize_image import denormalize_image
 from default_config import label_map
 import csv
 
-def predict(model, model_path, device, num_images, output_file="image_probabilities.csv"):
+def plot_classified_and_misclassified(correctly_classified, misclassified):
+    num_images = 3
+    
+    # Sort by confidence
+    correctly_classified.sort(key=lambda x: x[1], reverse=True)
+    misclassified.sort(key=lambda x: x[1], reverse=True)
+
+    # Get top `num_images` for each class
+    top_correct = []
+    top_incorrect = []
+    for label in set(x[2] for x in correctly_classified):
+        top_correct.extend([x for x in correctly_classified if x[2] == label][:num_images])
+        top_incorrect.extend([x for x in misclassified if x[2] == label][:num_images])
+
+    # Plot correctly and misclassified images
+    fig, axs = plt.subplots(2, num_images * 2 + 1, figsize=(20, 10))
+    
+    # Add row labels
+    axs[0, 0].text(0.5, 0.5, 'Correctly Classified', fontsize=12, ha='center', va='center', rotation=90)
+    axs[0, 0].axis('off')
+    axs[1, 0].text(0.5, 0.5, 'Misclassified', fontsize=12, ha='center', va='center', rotation=90)
+    axs[1, 0].axis('off')
+
+    # Show correctly classified images
+    for i, (img, prob, true_label, pred_label) in enumerate(top_correct):
+        img = denormalize_image(img)
+        axs[0, i + 1].imshow(img.permute(1, 2, 0))
+        axs[0, i + 1].set_title(f"True: {true_label}, Pred: {pred_label}, Prob: {prob:.2f}")
+        axs[0, i + 1].axis('off')
+
+    # Show misclassified images
+    for i, (img, prob, true_label, pred_label) in enumerate(top_incorrect):
+        img = denormalize_image(img)
+        axs[1, i + 1].imshow(img.permute(1, 2, 0))
+        axs[1, i + 1].set_title(f"True: {true_label}, Pred: {pred_label}, Prob: {prob:.2f}")
+        axs[1, i + 1].axis('off')
+
+    plt.tight_layout()
+    plt.show()
+
+def predict(model, device, model_path, results_file="image_probabilities.csv"):
     # Load model
     model.to(device)
     model.load_state_dict(torch.load(model_path, weights_only=True))
     model.eval()
     
     # Get validation loader
-    val_loader = get_test_loader()
+    test_loader = get_val_loader()
     
     misclassified = []
     correctly_classified = []
@@ -21,15 +61,15 @@ def predict(model, model_path, device, num_images, output_file="image_probabilit
     misclass_class_counts = defaultdict(int)
 
     # Access image paths directly from the dataset within the loader
-    image_paths = [sample[0] for sample in val_loader.dataset.samples]
+    image_paths = [sample[0] for sample in test_loader.dataset.samples]
 
     # Open CSV file for writing
-    with open(output_file, mode="w", newline="") as file:
+    with open(results_file, mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["Image Name", "Correct Prediction", "True Label", "Predicted Label", "Probabilities"])
         
         with torch.no_grad():
-            for batch_idx, (images, labels) in enumerate(val_loader):
+            for batch_idx, (images, labels) in enumerate(test_loader):
                 images, labels = images.to(device), labels.to(device)
                 outputs = model(images)
                 
@@ -37,7 +77,7 @@ def predict(model, model_path, device, num_images, output_file="image_probabilit
                 predicted_labels = torch.argmax(probs, dim=1)
                 
                 for idx in range(images.size(0)):
-                    image_index = batch_idx * val_loader.batch_size + idx
+                    image_index = batch_idx * test_loader.batch_size + idx
                     img = images[idx].cpu()
                     image_name = image_paths[image_index]
                     
@@ -75,47 +115,10 @@ def predict(model, model_path, device, num_images, output_file="image_probabilit
     # Print class-wise statistics
     print("\nClass-wise Correctly Classified Counts:")
     for label, count in correct_class_counts.items():
-        print(f"Class {label_map[label]}: {count}")
+        print(f"Class {label}: {count}")
 
     print("\nClass-wise Misclassified Counts:")
     for label, count in misclass_class_counts.items():
-        print(f"Class {label_map[label]}: {count}")
-
-    # Sort by confidence
-    correctly_classified.sort(key=lambda x: x[1], reverse=True)
-    misclassified.sort(key=lambda x: x[1], reverse=True)
-
-    # Get top `num_images` for each class
-    top_correct = []
-    top_incorrect = []
-    for label in set(x[2] for x in correctly_classified):
-        top_correct.extend([x for x in correctly_classified if x[2] == label][:num_images])
-        top_incorrect.extend([x for x in misclassified if x[2] == label][:num_images])
-
-    # Plot correctly and misclassified images
-    fig, axs = plt.subplots(2, num_images * 2 + 1, figsize=(15, 6))
-    
-    # Add row labels
-    axs[0, 0].text(0.5, 0.5, 'Correctly Classified', fontsize=12, ha='center', va='center', rotation=90)
-    axs[0, 0].axis('off')
-    axs[1, 0].text(0.5, 0.5, 'Misclassified', fontsize=12, ha='center', va='center', rotation=90)
-    axs[1, 0].axis('off')
-
-    # Show correctly classified images
-    for i, (img, prob, true_label, pred_label) in enumerate(top_correct):
-        img = denormalize_image(img)
-        axs[0, i + 1].imshow(img.permute(1, 2, 0))
-        axs[0, i + 1].set_title(f"True: {label_map[true_label]}, Pred: {label_map[pred_label]}, Prob: {prob:.2f}")
-        axs[0, i + 1].axis('off')
-
-    # Show misclassified images
-    for i, (img, prob, true_label, pred_label) in enumerate(top_incorrect):
-        img = denormalize_image(img)
-        axs[1, i + 1].imshow(img.permute(1, 2, 0))
-        axs[1, i + 1].set_title(f"True: {label_map[true_label]}, Pred: {label_map[pred_label]}, Prob: {prob:.2f}")
-        axs[1, i + 1].axis('off')
-
-    plt.tight_layout()
-    plt.show()
-
-    print(f"Predictions saved to {output_file}")
+        print(f"Class {label}: {count}")
+        
+    plot_classified_and_misclassified(correctly_classified, misclassified)

@@ -52,7 +52,6 @@ default_train_config = {
 default_net_config = {
     "in_channels": 3,
     "num_classes": 2,
-    "type": "CNN",
     "cv_layers": [
         {"out_channels": 16, "kernel_size": 3, "stride": 1, "padding": 1, "batch_norm": False, "max_pool": 0, "max_pool_stride": 1},
         {"out_channels": 32, "kernel_size": 3, "stride": 1, "padding": 1, "batch_norm": False, "max_pool": 0, "max_pool_stride": 1},
@@ -63,7 +62,7 @@ default_net_config = {
 
 default_config = {
     "label": "Default Experiment",
-    "n_epochs": 80,
+    "n_epochs": 100,
     "store_model": True,
     "store_results": True,
     "transform_config": default_transform_config,

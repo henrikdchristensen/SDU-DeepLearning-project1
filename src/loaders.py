@@ -65,12 +65,15 @@ def get_train_loader(transform_config=default_transform_config):
                                 pin_memory=pin_memory)
     return train_loader
 
-def get_test_loader():
-    val_transform = transforms.Compose([
+def test_transform():
+    return transforms.Compose([
         transforms.Resize((image_size, image_size)),
         transforms.ToTensor(),
         transforms.Normalize(mean=normalize_mean, std=normalize_std)
     ])
+
+def get_val_loader():
+    val_transform = test_transform()
     
     val_data = datasets.ImageFolder(val_dir, transform=val_transform)
     
