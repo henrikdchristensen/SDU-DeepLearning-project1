@@ -6,6 +6,11 @@ Resizing the images has the effect of reducing the size of the input to the mode
 
 Next, we had to decide how many layers our model should have.
 As the task is relatively simple, we decided to use 4 convolutional layers and 3 fully connected layers.
+Since the input images are in color and 224 pixels on each axis, inputting that image directly into the fully connected layers would result in a 224*224*3 = 150528 input size into the model. We would like to reduce this further, so the fully connected layers does not get an input of 150528. The convolution layers extract features, which makes it possible for the neural network to recognise a specific feature no matter where it is in the image, instead of having to learn that feature for every possible position in an image.
+
+We use cross entropy loss as our loss function since this loss function is a popular and good loss function for classification tasks. We use adam as the optimizer since it combines the strength of several other optimizers. 
+
+
 The base model is shown in Table \ref{tab:base_model}.
 \begin{table}[H]
     \vspace*{-0.5cm}
@@ -27,13 +32,16 @@ The base model is shown in Table \ref{tab:base_model}.
     \vspace*{-0.8cm}
 \end{table}
 Results of the base model after 25 epochs are shown in Figure \ref{fig:base_model_results}.
-% \begin{figure}[H]
-    %     \vspace*{-0.7cm}
-    %     \centering
-    %     \includegraphics[width=0.8\textwidth]{figures/pretrained_model_results.png}
-    %     \caption{Base Model Results.}
-    %     \label{fig:base_model_results}
-    %     \vspace*{-0.7cm}
-    % \end{figure}
+\begin{figure}[H]
+    \vspace*{-0.7cm}
+    \centering
+    \includegraphics[width=0.4\textwidth]{figures/results_base_model.png}
+    \caption{Base Model Results.}
+    \label{fig:base_model_results}
+    \vspace*{-0.7cm}
+\end{figure}
+
+We chose to train the model in 100 epochs. This is a sufficiently high number that the model gets to be properly trained, but still a reasonable number to keep within a reasonable time to train the model. More epochs is good until a certain point when the model starts overfitting. As an improvement we could have included some early stopping in case the model began overfitting.
+We chose a learning rate of 0.001. A learning rate that is too small could result in a very slow learning process that might get stuck, and a too big learning rate could result in learning a suboptimal set of weights or an unstable learning process. A smaller learning rate requires more epochs for a better result. The default learning rate is 0.01. We chose a smaller learning rate since we wanted our learning process to be very stable, and since we run 100 epochs it seemed appropriate.
 
 Clearly, the base model is overfitting, one way, especially for small datasets as in this case, to reduce overfitting is to use data augmentation, enabling the model to learn from more data.

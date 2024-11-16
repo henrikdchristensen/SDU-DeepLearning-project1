@@ -7,12 +7,12 @@ def plot_scores(results):
         epochs = range(1, data["n_epochs"] + 1)
         
         # Plot loss
-        axes[0].plot(epochs, data["train_losses"], marker='o', label=f"{label} Train Loss")
-        axes[0].plot(epochs, data["val_losses"], marker='o', linestyle='--', label=f"{label} Val Loss")
+        axes[0].plot(epochs, data["train_losses"], marker='o', markersize=3, label=f"{label} train")
+        axes[0].plot(epochs, data["val_losses"], marker='o', markersize=3, linestyle='--', label=f"{label} val")
         
         # Plot accuracy
-        axes[1].plot(epochs, data["train_accuracies"], marker='o', label=f"{label} Train Accuracy")
-        axes[1].plot(epochs, data["val_accuracies"], marker='o', linestyle='--', label=f"{label} Val Accuracy")
+        axes[1].plot(epochs, data["train_accuracies"], marker='o', markersize=3, label=f"{label} train")
+        axes[1].plot(epochs, data["val_accuracies"], marker='o', markersize=3, linestyle='--', label=f"{label} val")
     
         # Customize Loss plot
         axes[0].set_title("loss")
@@ -25,13 +25,8 @@ def plot_scores(results):
         axes[1].set_ylabel("accuracy (%)")
         
         # Create a single legend below the plots
-        handles, labels = [], []
-        for ax in axes:
-            for handle, label in zip(*ax.get_legend_handles_labels()):
-                handles.append(handle)
-                labels.append(label)
-                
-        fig.legend(handles, labels, loc="lower center", bbox_to_anchor=(0.5, -0.1), ncol=2)
+        handles, labels = axes[0].get_legend_handles_labels()
+        fig.legend(handles, labels, loc="lower center", bbox_to_anchor=(0.5, 0), ncol=2)
         
         plt.tight_layout(rect=[0, 0.1, 1, 0.9])
         plt.show()

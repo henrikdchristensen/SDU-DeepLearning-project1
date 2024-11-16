@@ -25,8 +25,6 @@ def plot_summed_feature_maps(model, device, img_path, output_file="feature_maps.
                 if isinstance(child, torch.nn.Conv2d):
                     conv_layers.append(child)
 
-    print(f"Total convolutional layers: {len(conv_layers)}")
-
     # Forward pass through model and collect feature maps
     outputs = []
     for layer in conv_layers:
@@ -35,7 +33,7 @@ def plot_summed_feature_maps(model, device, img_path, output_file="feature_maps.
 
     # Determine grid layout for plotting all layers
     num_layers = len(outputs)
-    col_size = 4 # number of columns
+    col_size = 5 # number of columns
     row_size = (num_layers + col_size - 1) // col_size
 
     # Create the figure

@@ -1,18 +1,15 @@
 \section{Conclusion}
+We ended up with a model that has ?? results. The model we used was ?? with ?? layers having XX parameters. This result is pretty good, but it could be improved. It is worth noticing that some of the pictures are very hard to classify, like dog.1335 and dog.1395.
 
+- compare results to pretrained model - why is the pretrained model better?
+
+
+The model could have been improved in various ways.
+First of all more training data would very likely improve the model a lot. In some of the pictures its very hard to see whether its a cat or a dog and its doubtful that the model would learn anything from the picture, so removing those pictures from the dataset would potentially help the model learn more meaningful features and also train faster.
+We could have run epochs until the model began overfitting and then stopped at that point. If time was not a factor this is probably what we would have done.
+We could have also experimented more with the different parameters like learning rate and weight decay. 
+We could have tried even more data augmentations to see what works best. We only rotate the pictures up to 25 degrees, which means that the model as an example would have a hard time recognising pictures of animals upside down.
 
 
 \subsection{Individual Contributions}
 
-
-\subsection{Improvements}
-- Residual NN - more FC layers
-- data augmentations
-- restrictions of model
-
-The model could have been improved in various ways. First of all more training data could potentially improve the model a lot, but we can't control this aspect.
-Of the aspects we could control, we could have run epochs until the model began overfitting and then stopped at that point. If time was not a factor this is probably what we would have done. We could have also experimented more with the different parameters like learning rate and weight decay. 
-
-We could have tried even more data augmentations to see what works best.
-
-\subsection{Individual Contributions}
