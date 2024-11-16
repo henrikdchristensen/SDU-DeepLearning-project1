@@ -21,7 +21,7 @@ def plot_classified_and_misclassified(correctly_classified, misclassified):
         top_incorrect.extend([x for x in misclassified if x[2] == label][:num_images])
 
     # Plot correctly and misclassified images
-    fig, axs = plt.subplots(2, num_images * 2 + 1, figsize=(20, 10))
+    fig, axs = plt.subplots(2, num_images * 2 + 1, figsize=(25, 10))
     
     # Add row labels
     axs[0, 0].text(0.5, 0.5, 'Correctly Classified', fontsize=12, ha='center', va='center', rotation=90)
