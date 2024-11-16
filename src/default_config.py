@@ -63,8 +63,6 @@ default_net_config = {
 default_config = {
     "label": "Default Experiment",
     "n_epochs": 100,
-    "store_model": True,
-    "store_results": True,
     "transform_config": default_transform_config,
     "train_config": default_train_config,
     "net_config": default_net_config

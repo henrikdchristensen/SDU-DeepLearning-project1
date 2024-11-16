@@ -33,14 +33,14 @@ def plot_classified_and_misclassified(correctly_classified, misclassified):
     for i, (img, prob, true_label, pred_label) in enumerate(top_correct):
         img = denormalize_image(img)
         axs[0, i + 1].imshow(img.permute(1, 2, 0))
-        axs[0, i + 1].set_title(f"True: {true_label}, Pred: {pred_label}, Prob: {prob:.2f}")
+        axs[0, i + 1].set_title(f"True: {true_label}, Pred: {pred_label}, Prob: {prob*100:.2f}%")
         axs[0, i + 1].axis('off')
 
     # Show misclassified images
     for i, (img, prob, true_label, pred_label) in enumerate(top_incorrect):
         img = denormalize_image(img)
         axs[1, i + 1].imshow(img.permute(1, 2, 0))
-        axs[1, i + 1].set_title(f"True: {true_label}, Pred: {pred_label}, Prob: {prob:.2f}")
+        axs[1, i + 1].set_title(f"True: {true_label}, Pred: {pred_label}, Prob: {prob*100:.2f}%")
         axs[1, i + 1].axis('off')
 
     plt.tight_layout()
@@ -102,7 +102,7 @@ def predict(model, device, model_path, results_file="image_probabilities.csv"):
                         correct_prediction,
                         true_label,
                         pred_label,
-                        [f"{p:.2f}" for p in prob_values]
+                        [f"{p*100:.2f}%" for p in prob_values]
                     ])
 
     # Print total counts and accuracy
