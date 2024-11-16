@@ -7,3 +7,5 @@ notes:
 - why the optimizer?
 - why the number of epochs? purely time constrain?
 - why the learning rate?
+
+Since the input images are in color and 200 pixels on each axis, inputting that image directly into the fully connected layers would result in a 200*200*3 = 120000 input size into the model. We would like to reduce this further, so the fully connected layers does not get an input of 120000. The convolution layers extract features, which makes it possible for the neural network to recognise a specific feature no matter where it is in the image, instead of having to learn that feature for every possible position in an image. We have 4 layers of convolution. This is the result of trial and error.

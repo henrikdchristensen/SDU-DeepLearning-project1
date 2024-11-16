@@ -2,6 +2,8 @@
 We chose to augment the data in a few different ways since we want to generalize the data so the important features remain. 
 Augmented data means that the model can rely less on coincidences and has to rely more on actual features, which means that it will get better results when faced with new images. In other words, it reduces overfitting.
 
+We start out by resizing all images to the same size, so we can put the data into the model. We chose an image size of 200 by 200, since all images are bigger on each axis, so we only shrink pictures. This also has the effect of reducing the size of the input to the model which will reduce the accuracy a little bit, but make it train significantly faster.
+
 The images are of varying quality and taken in different lighting, and this is also what we can expect from the validation data.
 For this reason we change the brightness, saturation, contrast, and hue. This should make it easier for the model to find common features between different images, and make it better at recognising dogs and cats in pictures of varying quality.
 
