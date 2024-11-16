@@ -31,7 +31,7 @@ def plot_scores(results):
                 handles.append(handle)
                 labels.append(label)
                 
-        fig.legend(handles, labels, loc="lower center", ncol=2)
+        fig.legend(handles, labels, loc="lower center", bbox_to_anchor=(0.5, -0.1), ncol=2)
         
         plt.tight_layout(rect=[0, 0.1, 1, 0.9])
         plt.show()

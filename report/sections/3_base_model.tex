@@ -1,0 +1,39 @@
+\section{Base Model}
+First, we set out to develop a base model. However, first, we had to decide which image size to use.
+We chose an image size of 224 by 224, since almost all images are bigger on each axis, so we almost only shrink pictures.
+The pretrained models also uses resizing to 224 pixels making our model more comparable to the pretrained ones.
+Resizing the images has the effect of reducing the size of the input to the model which will reduce the accuracy a little bit, but make it train significantly faster.
+
+Next, we had to decide how many layers our model should have.
+As the task is relatively simple, we decided to use 4 convolutional layers and 3 fully connected layers.
+The base model is shown in Table \ref{tab:base_model}.
+\begin{table}[H]
+    \vspace*{-0.5cm}
+    \centering
+    \begin{tabular}{|l|c|c|c|c|}
+    \hline
+                & \textbf{Output}           & \textbf{Kernel}   & \textbf{MaxPooling}   & \textbf{Activation}   \\ 
+                & \textbf{kernels/features} &                   &   &   \\ \hline
+    Conv2D w/   & 32                        & 3x3                   & 2x2                   & ReLU                  \\ \hline
+    Conv2D w/   & 64                        & 3x3                   & 2x2                   & ReLU                  \\ \hline
+    Conv2D w/   & 128                       & 3x3                   & 2x2                   & ReLU                  \\ \hline
+    Conv2D w/   & 256                       & 3x3                   & 2x2                   & ReLU                  \\ \hline
+    Linear w/   & 256                       & -                     & -                     & ReLU                  \\ \hline
+    Linear w/   & 128                       & -                     & -                     & ReLU                  \\ \hline
+    Linear w/   & 2                         & -                     & -                     & -                     \\ \hline
+    \end{tabular}
+    \caption{Base Model.}
+    \label{tab:base_model}
+    \vspace*{-0.8cm}
+\end{table}
+Results of the base model after 25 epochs are shown in Figure \ref{fig:base_model_results}.
+% \begin{figure}[H]
+    %     \vspace*{-0.7cm}
+    %     \centering
+    %     \includegraphics[width=0.8\textwidth]{figures/pretrained_model_results.png}
+    %     \caption{Base Model Results.}
+    %     \label{fig:base_model_results}
+    %     \vspace*{-0.7cm}
+    % \end{figure}
+
+Clearly, the base model is overfitting, one way, especially for small datasets as in this case, to reduce overfitting is to use data augmentation, enabling the model to learn from more data.
