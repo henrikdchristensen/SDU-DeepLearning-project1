@@ -33,19 +33,22 @@ def predict(model, model_path, device, num_images, output_file="image_probabilit
                 images, labels = images.to(device), labels.to(device)
                 outputs = model(images)
                 
-                probs = torch.softmax(outputs, dim=1)  # Get probabilities
-                predicted_labels = torch.argmax(probs, dim=1)  # Predicted labels
+                probs = torch.softmax(outputs, dim=1)
+                predicted_labels = torch.argmax(probs, dim=1)
                 
                 for idx in range(images.size(0)):
                     image_index = batch_idx * val_loader.batch_size + idx
                     img = images[idx].cpu()
                     image_name = image_paths[image_index]
-                    true_label = labels[idx].cpu().item()
-                    pred_label = predicted_labels[idx].cpu().item()
+                    
+                    true_label_num = labels[idx].cpu().item()
+                    pred_label_num = predicted_labels[idx].cpu().item()
+                    true_label = label_map[true_label_num]
+                    pred_label = label_map[pred_label_num]
+                    
                     prob_values = probs[idx].cpu().tolist()
                     correct_prediction = true_label == pred_label
                     
-                    # Add to lists for plotting
                     if correct_prediction:
                         correctly_classified.append((img, max(prob_values), true_label, pred_label))
                         correct_class_counts[true_label] += 1
@@ -57,8 +60,8 @@ def predict(model, model_path, device, num_images, output_file="image_probabilit
                     writer.writerow([
                         image_name,
                         correct_prediction,
-                        label_map[true_label],
-                        label_map[pred_label],
+                        true_label,
+                        pred_label,
                         [f"{p:.2f}" for p in prob_values]
                     ])
 

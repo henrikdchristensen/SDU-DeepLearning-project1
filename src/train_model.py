@@ -1,10 +1,10 @@
 from default_config import default_config, batch_size, image_size
 from loaders import get_train_loader, get_test_loader
-from torchinfo import summary
+import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import time
+from torchinfo import summary
 
 def train_model(model, device, config=default_config):
     label = config["label"]
@@ -55,8 +55,11 @@ def train_model(model, device, config=default_config):
     total_start_time = time.time()
     
     for epoch in range(n_epochs):
+        
         start_time = time.time()
+        
         model.train() # set model to training mode
+        
         train_loss = 0.0
         correct = 0
         total = 0
@@ -94,6 +97,7 @@ def train_model(model, device, config=default_config):
 
         # Evaluation on validation set
         model.eval()  # set model to evaluation mode
+        
         val_loss = 0.0
         correct = 0
         total = 0
@@ -113,14 +117,13 @@ def train_model(model, device, config=default_config):
         val_accuracies.append(round(100 * correct / total, 2) if total > 0 else 0)
 
         # Print epoch summary
-        end_time = time.time()
-        epoch_duration = end_time - start_time
-        print(f"Epoch {epoch+1}/{n_epochs} | Train Loss: {train_losses[-1]} (acc. {train_accuracies[-1]}%) | "
-            f"Val Loss: {val_losses[-1]} (acc. {val_accuracies[-1]}%) | Time: {epoch_duration:.2f}s")
+        epoch_duration = round(time.time() - start_time)
+        print(f"Epoch {epoch+1}/{n_epochs} | Train Loss: {train_losses[-1]:.4f} (acc. {train_accuracies[-1]:.2f}%) | "
+            f"Val Loss: {val_losses[-1]:.4f} (acc. {val_accuracies[-1]:.2f}%) | Time: {epoch_duration}s")
     
     # Calculate and print total training time
-    total_training_time = time.time() - total_start_time
-    print(f"Training Time: {total_training_time:.2f}s")
+    total_training_time = round(time.time() - total_start_time)
+    print(f"Training Time: {total_training_time}s")
 
     # Save model and metrics to file
     with open(f"models/{label}.txt", "w") as f:
@@ -134,3 +137,11 @@ def train_model(model, device, config=default_config):
     
     # Save model to file
     torch.save(model.state_dict(), f"models/{label}.pth")
+    
+    return {
+        "n_epochs": n_epochs,
+        "train_losses": train_losses,
+        "val_losses": val_losses,
+        "train_accuracies": train_accuracies,
+        "val_accuracies": val_accuracies
+    }

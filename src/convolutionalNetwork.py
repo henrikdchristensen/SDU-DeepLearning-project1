@@ -8,7 +8,6 @@ class ConvolutionalNetwork(nn.Module):
         
         in_channels = net_config["in_channels"]
         num_classes = net_config["num_classes"]
-        self.avg_pool = net_config.get("avg_pool", False)
         
         layers = []
         self.relu = nn.ReLU()
@@ -21,7 +20,6 @@ class ConvolutionalNetwork(nn.Module):
             padding = config.get("padding", 0)
             batch_norm = config.get("batch_norm", False)
             max_pool = config.get("max_pool", 0)
-            dropout_rate = config.get("dropout_rate", 0)
             
             # Convolutional layer
             # - Output channels are the number of filters in the convolutional layer
@@ -48,18 +46,11 @@ class ConvolutionalNetwork(nn.Module):
                 max_pool_stride = config.get("max_pool_stride", 1)
                 layers.append(nn.MaxPool2d(kernel_size=max_pool, stride=max_pool_stride))
             
-            # Dropout layer
-            # - Dropout is a regularization technique to prevent overfitting by randomly setting some output features to zero
-            if dropout_rate > 0:
-                layers.append(nn.Dropout(p=dropout_rate))
-            
             # Update input channels for next iteration
             tmp_channels = out_channels
         
         # Sequential container for convolutional layers
         self.cv_layers = nn.Sequential(*layers)
-        
-        #TODO: Maybe try with average pool
         
         # Calculate input size of tensor after convolutional layers
         with torch.no_grad():
@@ -105,12 +96,6 @@ class ConvolutionalNetwork(nn.Module):
     
     def forward(self, x):
         x = self.cv_layers(x) # pass through convolutional layers
-        
-        if self.avg_pool: # apply global average pooling if enabled
-           x = self.global_avg_pool(x)
-       
         x = x.flatten(start_dim=1, end_dim=-1) # flatten tensor from convolutional layers for the linear fully connected layers
-        
         x = self.fc_layers(x) # pass through fully connected layers
-        
         return x

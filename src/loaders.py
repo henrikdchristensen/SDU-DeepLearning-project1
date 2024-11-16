@@ -4,27 +4,23 @@ from default_config import image_size, batch_size, num_workers, pin_memory, norm
 
 def get_train_loader(transform_config=default_transform_config):
     hflip = transform_config["hflip"]
-    vflip = transform_config["vflip"]
-    rotation = transform_config["rotation"]
-    crop_scale = transform_config["crop_scale"]
+    
     brightness_jitter = transform_config["brightness_jitter"]
     contrast_jitter = transform_config["contrast_jitter"]   
     saturation_jitter = transform_config["saturation_jitter"]
     hue_jitter = transform_config["hue_jitter"]
-    blur = transform_config["blur"]
-    affine = transform_config.get("affine", None)
+    
+    rotation = transform_config["rotation"]
+    crop_scale = transform_config["crop_scale"]
+    translate = transform_config["translate"]
+    shear = transform_config["shear"]
     
     transform_list = [transforms.Resize((image_size, image_size))] # always resizing
 
     # Add transformations
     if hflip:
         transform_list.append(transforms.RandomHorizontalFlip(p=0.5))
-    if vflip:
-        transform_list.append(transforms.RandomVerticalFlip(p=0.5))
-    if rotation > 0:
-        transform_list.append(transforms.RandomRotation(rotation))
-    if crop_scale < 1.0:
-        transform_list.append(transforms.RandomResizedCrop(image_size, scale=(crop_scale, 1.0)))
+    
     color_jitter_params = {}
     if brightness_jitter > 0:
         color_jitter_params["brightness"] = brightness_jitter
@@ -34,12 +30,20 @@ def get_train_loader(transform_config=default_transform_config):
         color_jitter_params["saturation"] = saturation_jitter
     if hue_jitter > 0:
         color_jitter_params["hue"] = hue_jitter
-    if color_jitter_params:
+    if brightness_jitter > 0 or contrast_jitter > 0 or saturation_jitter > 0 or hue_jitter > 0:
         transform_list.append(transforms.ColorJitter(**color_jitter_params))
-    if blur > 0:
-        transform_list.append(transforms.GaussianBlur(kernel_size=3, sigma=blur))
-    if affine is not None:
-        transform_list.append(transforms.RandomAffine(**affine))
+    
+    affine_params = {}
+    if rotation > 0:
+        affine_params["degrees"] = rotation
+    if crop_scale < 1 and rotation > 0:
+        affine_params["scale"] = (1-crop_scale, 1+crop_scale)
+    if translate > 0 and rotation > 0:
+        affine_params["translate"] = (translate, translate)
+    if shear > 0 and rotation > 0:
+        affine_params["shear"] = (-shear, shear)
+    if rotation > 0: # rotation must be set for RandomAffine to work
+        transform_list.append(transforms.RandomAffine(**affine_params))
     
     # Convert to tensor
     transform_list.append(transforms.ToTensor())

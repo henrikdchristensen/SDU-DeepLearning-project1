@@ -7,7 +7,7 @@ def plot_transformations(transformed_images, transforms):
     num_images = len(transformed_images)
     rows = math.ceil(num_images / num_images_in_row)
     
-    fig, axes = plt.subplots(rows, min(num_images_in_row, num_images), figsize=(5 * min(num_images_in_row, num_images), 5 * rows))
+    _, axes = plt.subplots(rows, min(num_images_in_row, num_images), figsize=(3 * min(num_images_in_row, num_images), 3 * rows))
 
     if rows == 1:
         axes = [axes]
