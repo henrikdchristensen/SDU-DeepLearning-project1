@@ -3,11 +3,16 @@ import math
 
 num_images_in_row = 3
 
+
 def plot_transformations(transformed_images, transforms):
     num_images = len(transformed_images)
     rows = math.ceil(num_images / num_images_in_row)
-    
-    _, axes = plt.subplots(rows, min(num_images_in_row, num_images), figsize=(3 * min(num_images_in_row, num_images), 3 * rows))
+
+    _, axes = plt.subplots(
+        rows,
+        min(num_images_in_row, num_images),
+        figsize=(3 * min(num_images_in_row, num_images), 3 * rows),
+    )
 
     if rows == 1:
         axes = [axes]
@@ -19,7 +24,7 @@ def plot_transformations(transformed_images, transforms):
         row, col = divmod(i, num_images_in_row)
         axes[row][col].imshow(img)
         axes[row][col].set_title(f"{transforms[i]}")
-    
+
     # Turn off axis for all subplots
     for row in axes:
         for ax in row:

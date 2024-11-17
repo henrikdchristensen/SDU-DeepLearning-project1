@@ -18,3 +18,16 @@ Note that step 3 is only neccessary if you are using another version than the on
 ```bash
     pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
 ```
+
+## Export notebook to pdf
+```bash
+jupyter nbconvert --to webpdf --allow-chromium-download notebook.ipynb
+```
+
+## Export code to pdf
+
+
+## Format code
+```bash
+black --line-length 100 . 
+```

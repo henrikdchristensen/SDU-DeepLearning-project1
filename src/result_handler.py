@@ -1,6 +1,7 @@
 from convolutionalNetwork import ConvolutionalNetwork
 from train_model import train_model
 
+
 def result_handler(configs, device):
     results = {}
     for config in configs:
