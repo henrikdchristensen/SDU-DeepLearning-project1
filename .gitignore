@@ -2,6 +2,7 @@
 src/data
 *.pth
 __pycache__
+src/notebook_files
 
 ## LaTeX to ignore ##
 *.aux

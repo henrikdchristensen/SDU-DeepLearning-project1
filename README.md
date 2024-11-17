@@ -1,4 +1,6 @@
 # Readme
+All the results are stored in the `notebook.ipynb`.
+
 ## Create conda environment
 ```bash
 conda create -n deep python=3.12
@@ -19,13 +21,16 @@ Note that step 3 is only neccessary if you are using another version than the on
     pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
 ```
 
-## Export notebook to pdf
+## Export notebook to LaTeX
 ```bash
-jupyter nbconvert --to webpdf --allow-chromium-download notebook.ipynb
+jupyter nbconvert --to latex notebook.ipynb
 ```
+Change `\documentclass[11pt]{article}` with `\documentclass[8pt]{extarticle}` and export to pdf.
 
 ## Export code to pdf
-
+```bash
+python export_code_to_pdf.py
+```
 
 ## Format code
 ```bash

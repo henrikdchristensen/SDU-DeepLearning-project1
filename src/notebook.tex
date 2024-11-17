@@ -1,0 +1,2424 @@
+\documentclass[8pt]{extarticle}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{notebook}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+
+    \maketitle
+
+    
+    \subsection{Libraries}\label{libraries}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{os}
+\PY{k+kn}{import} \PY{n+nn}{random}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{from} \PY{n+nn}{PIL} \PY{k+kn}{import} \PY{n}{Image}
+
+\PY{k+kn}{import} \PY{n+nn}{torch}
+\PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn} \PY{k}{as} \PY{n+nn}{nn}
+\PY{k+kn}{from} \PY{n+nn}{torchvision} \PY{k+kn}{import} \PY{n}{datasets}\PY{p}{,} \PY{n}{transforms}
+\PY{k+kn}{import} \PY{n+nn}{torchvision}\PY{n+nn}{.}\PY{n+nn}{transforms}\PY{n+nn}{.}\PY{n+nn}{functional} \PY{k}{as} \PY{n+nn}{TF}
+\PY{k+kn}{from} \PY{n+nn}{torchvision}\PY{n+nn}{.}\PY{n+nn}{models} \PY{k+kn}{import} \PY{n}{alexnet}\PY{p}{,} \PY{n}{AlexNet\PYZus{}Weights}\PY{p}{,} \PY{n}{AlexNet}
+
+\PY{k+kn}{from} \PY{n+nn}{default\PYZus{}config} \PY{k+kn}{import} \PY{n}{default\PYZus{}config}\PY{p}{,} \PY{n}{default\PYZus{}net\PYZus{}config}\PY{p}{,} \PY{n}{default\PYZus{}train\PYZus{}config}\PY{p}{,} \PY{n}{data\PYZus{}dir}\PY{p}{,} \PY{n}{train\PYZus{}dir}\PY{p}{,} \PY{n}{no\PYZus{}transform\PYZus{}config}
+\PY{k+kn}{from} \PY{n+nn}{convolutionalNetwork} \PY{k+kn}{import} \PY{n}{ConvolutionalNetwork}
+\PY{k+kn}{from} \PY{n+nn}{predict} \PY{k+kn}{import} \PY{n}{predict}
+\PY{k+kn}{from} \PY{n+nn}{plot\PYZus{}scores} \PY{k+kn}{import} \PY{n}{plot\PYZus{}scores}
+\PY{k+kn}{from} \PY{n+nn}{plot\PYZus{}transformations} \PY{k+kn}{import} \PY{n}{plot\PYZus{}transformations}
+\PY{k+kn}{from} \PY{n+nn}{plot\PYZus{}individual\PYZus{}feature\PYZus{}maps} \PY{k+kn}{import} \PY{n}{plot\PYZus{}individual\PYZus{}feature\PYZus{}maps}
+\PY{k+kn}{from} \PY{n+nn}{denormalize\PYZus{}image} \PY{k+kn}{import} \PY{n}{denormalize\PYZus{}image}
+\PY{k+kn}{from} \PY{n+nn}{loaders} \PY{k+kn}{import} \PY{n}{get\PYZus{}train\PYZus{}loader}
+\PY{k+kn}{from} \PY{n+nn}{result\PYZus{}handler} \PY{k+kn}{import} \PY{n}{result\PYZus{}handler}
+\PY{k+kn}{from} \PY{n+nn}{train\PYZus{}model} \PY{k+kn}{import} \PY{n}{train\PYZus{}model}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsection{Check device}\label{check-device}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cuda}\PY{l+s+s2}{\PYZdq{}} \PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{cuda}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)} \PY{k}{else} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cpu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+\PY{n}{torch}\PY{o}{.}\PY{n}{\PYZus{}\PYZus{}version\PYZus{}\PYZus{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+cuda
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+'2.5.1+cu124'
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \subsection{Seed}\label{seed}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{seed} \PY{o}{=} \PY{l+m+mi}{42}
+
+\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{n}{seed}\PY{p}{)}
+\PY{n}{torch}\PY{o}{.}\PY{n}{manual\PYZus{}seed}\PY{p}{(}\PY{n}{seed}\PY{p}{)}
+\PY{n}{torch}\PY{o}{.}\PY{n}{cuda}\PY{o}{.}\PY{n}{manual\PYZus{}seed}\PY{p}{(}\PY{n}{seed}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsection{Explorative Data Analysis}\label{explorative-data-analysis}
+
+    \subsubsection{Dataset walking}\label{dataset-walking}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{dirpath}\PY{p}{,} \PY{n}{dirnames}\PY{p}{,} \PY{n}{filenames} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{walk}\PY{p}{(}\PY{n}{data\PYZus{}dir}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{dirnames}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:} \PY{c+c1}{\PYZsh{} only innermost directories}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{dirpath}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{ directory contains }\PY{l+s+si}{\PYZob{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{filenames}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ images}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+'data\textbackslash{}test\textbackslash{}cats' directory contains 200 images
+'data\textbackslash{}test\textbackslash{}dogs' directory contains 200 images
+'data\textbackslash{}train\textbackslash{}cats' directory contains 1000 images
+'data\textbackslash{}train\textbackslash{}dogs' directory contains 1000 images
+'data\textbackslash{}validation\textbackslash{}cats' directory contains 300 images
+'data\textbackslash{}validation\textbackslash{}dogs' directory contains 300 images
+    \end{Verbatim}
+
+    \subsubsection{Labels}\label{labels}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{datasets}\PY{o}{.}\PY{n}{ImageFolder}\PY{p}{(}\PY{n}{train\PYZus{}dir}\PY{p}{,} \PY{n}{transform}\PY{o}{=}\PY{n}{transforms}\PY{o}{.}\PY{n}{ToTensor}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{class\PYZus{}to\PYZus{}idx}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{'cats': 0, 'dogs': 1\}
+    \end{Verbatim}
+
+    \subsubsection{Plot 10 random images of both cats and
+dogs}\label{plot-10-random-images-of-both-cats-and-dogs}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{train\PYZus{}cats\PYZus{}dir} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}dir}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{/cats}\PY{l+s+s2}{\PYZdq{}}
+\PY{n}{train\PYZus{}dogs\PYZus{}dir} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}dir}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{/dogs}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{n}{cats\PYZus{}images} \PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{sample}\PY{p}{(}\PY{p}{[}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}cats\PYZus{}dir}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{/}\PY{l+s+si}{\PYZob{}}\PY{n}{filename}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}} \PY{k}{for} \PY{n}{filename} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{train\PYZus{}cats\PYZus{}dir}\PY{p}{)}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{dogs\PYZus{}images} \PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{sample}\PY{p}{(}\PY{p}{[}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}dogs\PYZus{}dir}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{/}\PY{l+s+si}{\PYZob{}}\PY{n}{filename}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}} \PY{k}{for} \PY{n}{filename} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{train\PYZus{}dogs\PYZus{}dir}\PY{p}{)}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot cat images}
+\PY{n}{fig1}\PY{p}{,} \PY{n}{axes1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+\PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{img} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{cats\PYZus{}images}\PY{p}{)}\PY{p}{:}
+    \PY{n}{axes1}\PY{p}{[}\PY{n}{i} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{5}\PY{p}{]}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{plt}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{n}{img}\PY{p}{)}\PY{p}{)}
+    \PY{n}{axes1}\PY{p}{[}\PY{n}{i} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{5}\PY{p}{]}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{off}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot dog images}
+\PY{n}{fig2}\PY{p}{,} \PY{n}{axes2} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+\PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{img} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{dogs\PYZus{}images}\PY{p}{)}\PY{p}{:}
+    \PY{n}{axes2}\PY{p}{[}\PY{n}{i} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{5}\PY{p}{]}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{plt}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{n}{img}\PY{p}{)}\PY{p}{)}
+    \PY{n}{axes2}\PY{p}{[}\PY{n}{i} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{5}\PY{p}{]}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{off}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_12_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_12_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{Image Size}\label{image-size}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{image} \PY{o}{=} \PY{n}{Image}\PY{o}{.}\PY{n}{open}\PY{p}{(}\PY{n}{cats\PYZus{}images}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Image size: }\PY{l+s+si}{\PYZob{}}\PY{n}{image}\PY{o}{.}\PY{n}{size}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Plot image\PYZus{}resized}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{image}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Original Image}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{off}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Image size: (500, 374)
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_14_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{factors} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{125}\PY{p}{,} \PY{l+m+mi}{150}\PY{p}{,} \PY{l+m+mi}{175}\PY{p}{,} \PY{l+m+mi}{200}\PY{p}{,} \PY{l+m+mi}{225}\PY{p}{,} \PY{l+m+mi}{250}\PY{p}{]}
+
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{factor} \PY{o+ow}{in} \PY{n}{factors}\PY{p}{:}
+    \PY{n}{transformed\PYZus{}image} \PY{o}{=} \PY{n}{TF}\PY{o}{.}\PY{n}{resize}\PY{p}{(}\PY{n}{image}\PY{p}{,} \PY{n}{factor}\PY{p}{)}
+    \PY{n}{transformed\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{transformed\PYZus{}image}\PY{p}{)}
+
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{n}{factors}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_15_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    An image size of 225 seems good, however, for compatibility with
+pre-trained models we choose 224.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{image\PYZus{}resized} \PY{o}{=} \PY{n}{TF}\PY{o}{.}\PY{n}{resize}\PY{p}{(}\PY{n}{image}\PY{p}{,} \PY{l+m+mi}{224}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsection{Base Model}\label{base-model}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{net\PYZus{}config0} \PY{o}{=} \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}net\PYZus{}config}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}layers}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{32}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{False}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{64}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{False}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{False}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{256}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{False}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{]}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fc\PYZus{}layers}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{256}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{False}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dropout\PYZus{}rate}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{False}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dropout\PYZus{}rate}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{]}
+\PY{p}{\PYZcb{}}
+
+\PY{n}{config0} \PY{o}{=} \PY{p}{[}\PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}config}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{label}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{base\PYZus{}model}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n\PYZus{}epochs}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{25}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{net\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{net\PYZus{}config0}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{transform\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{no\PYZus{}transform\PYZus{}config}\PY{p}{\PYZcb{}}\PY{p}{]}
+\PY{n}{results} \PY{o}{=} \PY{n}{result\PYZus{}handler}\PY{p}{(}\PY{n}{config0}\PY{p}{,} \PY{n}{device}\PY{p}{)}
+\PY{n}{plot\PYZus{}scores}\PY{p}{(}\PY{n}{results}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Experiment: base\_model
+Epoch 1/25 | Train Loss: 0.6952 (acc. 52.65\%) | Val Loss: 0.6951 (acc. 50.00\%) |
+Time: 35s
+Epoch 2/25 | Train Loss: 0.6737 (acc. 57.75\%) | Val Loss: 0.6627 (acc. 59.17\%) |
+Time: 35s
+Epoch 3/25 | Train Loss: 0.6153 (acc. 65.20\%) | Val Loss: 0.6417 (acc. 61.83\%) |
+Time: 34s
+Epoch 4/25 | Train Loss: 0.5763 (acc. 69.80\%) | Val Loss: 0.6698 (acc. 59.17\%) |
+Time: 34s
+Epoch 5/25 | Train Loss: 0.5369 (acc. 72.65\%) | Val Loss: 0.5722 (acc. 68.17\%) |
+Time: 33s
+Epoch 6/25 | Train Loss: 0.4914 (acc. 76.10\%) | Val Loss: 0.6250 (acc. 68.83\%) |
+Time: 34s
+Epoch 7/25 | Train Loss: 0.4459 (acc. 79.00\%) | Val Loss: 0.5959 (acc. 71.50\%) |
+Time: 34s
+Epoch 8/25 | Train Loss: 0.3771 (acc. 82.50\%) | Val Loss: 0.6838 (acc. 70.33\%) |
+Time: 34s
+Epoch 9/25 | Train Loss: 0.2845 (acc. 88.25\%) | Val Loss: 0.7522 (acc. 70.33\%) |
+Time: 34s
+Epoch 10/25 | Train Loss: 0.2194 (acc. 91.05\%) | Val Loss: 0.8570 (acc. 68.50\%)
+| Time: 33s
+Epoch 11/25 | Train Loss: 0.1277 (acc. 95.40\%) | Val Loss: 1.1103 (acc. 71.67\%)
+| Time: 34s
+Epoch 12/25 | Train Loss: 0.0657 (acc. 98.00\%) | Val Loss: 1.3821 (acc. 67.50\%)
+| Time: 33s
+Epoch 13/25 | Train Loss: 0.0685 (acc. 97.80\%) | Val Loss: 1.4903 (acc. 72.17\%)
+| Time: 33s
+Epoch 14/25 | Train Loss: 0.0439 (acc. 98.55\%) | Val Loss: 1.4245 (acc. 71.17\%)
+| Time: 33s
+Epoch 15/25 | Train Loss: 0.0373 (acc. 98.80\%) | Val Loss: 1.9494 (acc. 71.83\%)
+| Time: 34s
+Epoch 16/25 | Train Loss: 0.0244 (acc. 99.20\%) | Val Loss: 1.7371 (acc. 72.17\%)
+| Time: 34s
+Epoch 17/25 | Train Loss: 0.0406 (acc. 99.05\%) | Val Loss: 1.6526 (acc. 70.83\%)
+| Time: 33s
+Epoch 18/25 | Train Loss: 0.0201 (acc. 99.20\%) | Val Loss: 1.7009 (acc. 70.50\%)
+| Time: 33s
+Epoch 19/25 | Train Loss: 0.0110 (acc. 99.65\%) | Val Loss: 1.7072 (acc. 72.17\%)
+| Time: 33s
+Epoch 20/25 | Train Loss: 0.0020 (acc. 100.00\%) | Val Loss: 1.9952 (acc. 70.83\%)
+| Time: 34s
+Epoch 21/25 | Train Loss: 0.0004 (acc. 100.00\%) | Val Loss: 2.1588 (acc. 71.00\%)
+| Time: 33s
+Epoch 22/25 | Train Loss: 0.0002 (acc. 100.00\%) | Val Loss: 2.2134 (acc. 70.83\%)
+| Time: 33s
+Epoch 23/25 | Train Loss: 0.0001 (acc. 100.00\%) | Val Loss: 2.2571 (acc. 71.00\%)
+| Time: 34s
+Epoch 24/25 | Train Loss: 0.0001 (acc. 100.00\%) | Val Loss: 2.2897 (acc. 71.00\%)
+| Time: 33s
+Epoch 25/25 | Train Loss: 0.0001 (acc. 100.00\%) | Val Loss: 2.3216 (acc. 71.50\%)
+| Time: 33s
+Training Time: 840s
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_19_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{Data Augmentation}\label{data-augmentation}
+
+    \subsubsection{Flip}\label{flip}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{transformed\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{)}
+\PY{n}{transformed\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{TF}\PY{o}{.}\PY{n}{hflip}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{)}\PY{p}{)}
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{orig}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{flipped}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_22_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{transformed\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{)}
+\PY{n}{transformed\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{TF}\PY{o}{.}\PY{n}{vflip}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{)}\PY{p}{)}
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{orig}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{flipped}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_23_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Choose to only horizontal flip.
+
+    \subsubsection{Image color}\label{image-color}
+
+    \paragraph{Brightness}\label{brightness}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{factors} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.6}\PY{p}{,} \PY{l+m+mf}{0.8}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{,} \PY{l+m+mf}{1.2}\PY{p}{,} \PY{l+m+mf}{1.4}\PY{p}{]}
+
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{factor} \PY{o+ow}{in} \PY{n}{factors}\PY{p}{:}
+    \PY{n}{transformed\PYZus{}image} \PY{o}{=} \PY{n}{TF}\PY{o}{.}\PY{n}{adjust\PYZus{}brightness}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{,} \PY{n}{factor}\PY{p}{)}
+    \PY{n}{transformed\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{transformed\PYZus{}image}\PY{p}{)}
+
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{n}{factors}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_27_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \paragraph{Contrast}\label{contrast}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{factors} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.4}\PY{p}{,} \PY{l+m+mf}{0.6}\PY{p}{,} \PY{l+m+mf}{0.8}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{,} \PY{l+m+mf}{1.2}\PY{p}{,} \PY{l+m+mf}{1.4}\PY{p}{]}
+
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{factor} \PY{o+ow}{in} \PY{n}{factors}\PY{p}{:}
+    \PY{n}{transformed\PYZus{}image} \PY{o}{=} \PY{n}{TF}\PY{o}{.}\PY{n}{adjust\PYZus{}contrast}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{,} \PY{n}{factor}\PY{p}{)}
+    \PY{n}{transformed\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{transformed\PYZus{}image}\PY{p}{)}
+
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{n}{factors}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_29_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \paragraph{Saturation}\label{saturation}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{factors} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{l+m+mf}{0.8}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{,} \PY{l+m+mf}{1.2}\PY{p}{,} \PY{l+m+mf}{1.6}\PY{p}{,} \PY{l+m+mf}{2.0}\PY{p}{]}
+
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{factor} \PY{o+ow}{in} \PY{n}{factors}\PY{p}{:}
+    \PY{n}{transformed\PYZus{}image} \PY{o}{=} \PY{n}{TF}\PY{o}{.}\PY{n}{adjust\PYZus{}saturation}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{,} \PY{n}{factor}\PY{p}{)}
+    \PY{n}{transformed\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{transformed\PYZus{}image}\PY{p}{)}
+
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{n}{factors}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_31_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \paragraph{Hue}\label{hue}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{factors} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.2}\PY{p}{]}
+
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{factor} \PY{o+ow}{in} \PY{n}{factors}\PY{p}{:}
+    \PY{n}{transformed\PYZus{}image} \PY{o}{=} \PY{n}{TF}\PY{o}{.}\PY{n}{adjust\PYZus{}hue}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{,} \PY{n}{factor}\PY{p}{)}
+    \PY{n}{transformed\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{transformed\PYZus{}image}\PY{p}{)}
+
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{n}{factors}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_33_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsubsection{Affine (rotation, scaling, translation,
+shearing)}\label{affine-rotation-scaling-translation-shearing}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{apply\PYZus{}affine}\PY{p}{(}\PY{n}{image}\PY{p}{,} \PY{n}{angle}\PY{p}{,} \PY{n}{translate}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{scale}\PY{o}{=}\PY{l+m+mf}{1.0}\PY{p}{,} \PY{n}{shear}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{TF}\PY{o}{.}\PY{n}{affine}\PY{p}{(}\PY{n}{image}\PY{p}{,} \PY{n}{angle}\PY{o}{=}\PY{n}{angle}\PY{p}{,} \PY{n}{translate}\PY{o}{=}\PY{n}{translate}\PY{p}{,} \PY{n}{scale}\PY{o}{=}\PY{n}{scale}\PY{p}{,} \PY{n}{shear}\PY{o}{=}\PY{n}{shear}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Rotation}
+\PY{n}{angles} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{15}\PY{p}{,} \PY{l+m+mi}{30}\PY{p}{,} \PY{l+m+mi}{45}\PY{p}{,} \PY{l+m+mi}{60}\PY{p}{,} \PY{l+m+mi}{75}\PY{p}{]}
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{n}{apply\PYZus{}affine}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{,} \PY{n}{angle}\PY{o}{=}\PY{n}{angle}\PY{p}{)} \PY{k}{for} \PY{n}{angle} \PY{o+ow}{in} \PY{n}{angles}\PY{p}{]}
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{n}{angles}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Scales}
+\PY{n}{scales} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.8}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{,} \PY{l+m+mf}{1.2}\PY{p}{,} \PY{l+m+mf}{1.5}\PY{p}{,} \PY{l+m+mf}{1.8}\PY{p}{,} \PY{l+m+mf}{2.0}\PY{p}{]}
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{n}{apply\PYZus{}affine}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{,} \PY{n}{angle}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{scale}\PY{o}{=}\PY{n}{scale}\PY{p}{)} \PY{k}{for} \PY{n}{scale} \PY{o+ow}{in} \PY{n}{scales}\PY{p}{]}
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{n}{scales}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Translations}
+\PY{n}{translations} \PY{o}{=} \PY{p}{[}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{30}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{40}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{50}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{]}
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{n}{apply\PYZus{}affine}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{,} \PY{n}{angle}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{translate}\PY{o}{=}\PY{n}{translate}\PY{p}{)} \PY{k}{for} \PY{n}{translate} \PY{o+ow}{in} \PY{n}{translations}\PY{p}{]}
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{p}{[}\PY{n}{t}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{translations}\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Shear}
+\PY{n}{shears} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{30}\PY{p}{,} \PY{l+m+mi}{40}\PY{p}{,} \PY{l+m+mi}{50}\PY{p}{]}
+\PY{n}{transformed\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{n}{apply\PYZus{}affine}\PY{p}{(}\PY{n}{image\PYZus{}resized}\PY{p}{,} \PY{n}{angle}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{shear}\PY{o}{=}\PY{n}{shear}\PY{p}{)} \PY{k}{for} \PY{n}{shear} \PY{o+ow}{in} \PY{n}{shears}\PY{p}{]}
+\PY{n}{plot\PYZus{}transformations}\PY{p}{(}\PY{n}{transformed\PYZus{}images}\PY{p}{,} \PY{n}{shears}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_35_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_35_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_35_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_35_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsubsection{Final loader}\label{final-loader}
+
+    \paragraph{With normalization}\label{with-normalization}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{train\PYZus{}loader} \PY{o}{=} \PY{n}{get\PYZus{}train\PYZus{}loader}\PY{p}{(}\PY{p}{)}
+\PY{n}{images}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n+nb}{next}\PY{p}{(}\PY{n+nb}{iter}\PY{p}{(}\PY{n}{train\PYZus{}loader}\PY{p}{)}\PY{p}{)}
+\PY{n}{fig}\PY{p}{,} \PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n}{img} \PY{o}{=} \PY{n}{images}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{permute}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{o}{.}\PY{n}{cpu}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} convert to (H, W, C)}
+    \PY{n}{img} \PY{o}{=} \PY{n}{img}\PY{o}{.}\PY{n}{clip}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)} \PY{c+c1}{\PYZsh{} clip values to [0, 1]}
+    \PY{n}{axes}\PY{p}{[}\PY{n}{i} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{5}\PY{p}{]}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img}\PY{p}{)}
+    \PY{n}{axes}\PY{p}{[}\PY{n}{i} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{5}\PY{p}{]}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{off}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_38_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \paragraph{Without normalization}\label{without-normalization}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{train\PYZus{}loader} \PY{o}{=} \PY{n}{get\PYZus{}train\PYZus{}loader}\PY{p}{(}\PY{p}{)}
+\PY{n}{images}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n+nb}{next}\PY{p}{(}\PY{n+nb}{iter}\PY{p}{(}\PY{n}{train\PYZus{}loader}\PY{p}{)}\PY{p}{)}
+\PY{n}{fig}\PY{p}{,} \PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n}{axes}\PY{p}{[}\PY{n}{i} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{5}\PY{p}{]}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{denormalize\PYZus{}image}\PY{p}{(}\PY{n}{images}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{permute}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} denormalize and convert to (H, W, C)}
+    \PY{n}{axes}\PY{p}{[}\PY{n}{i} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{5}\PY{p}{]}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{off}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_40_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{With Data Augmentation}\label{with-data-augmentation}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{config0} \PY{o}{=} \PY{p}{[}\PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}config}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{label}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{w\PYZus{}augmentation}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{net\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{net\PYZus{}config0}\PY{p}{\PYZcb{}}\PY{p}{]}
+\PY{n}{results} \PY{o}{=} \PY{n}{result\PYZus{}handler}\PY{p}{(}\PY{n}{config0}\PY{p}{,} \PY{n}{device}\PY{p}{)}
+\PY{n}{plot\PYZus{}scores}\PY{p}{(}\PY{n}{results}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Experiment: w\_augmentation
+Epoch 1/120 | Train Loss: 0.6994 (acc. 51.70\%) | Val Loss: 0.6878 (acc. 60.17\%)
+| Time: 34s
+Epoch 2/120 | Train Loss: 0.6895 (acc. 53.75\%) | Val Loss: 0.6895 (acc. 50.33\%)
+| Time: 34s
+Epoch 3/120 | Train Loss: 0.6801 (acc. 54.30\%) | Val Loss: 0.6847 (acc. 55.33\%)
+| Time: 34s
+Epoch 4/120 | Train Loss: 0.6598 (acc. 59.65\%) | Val Loss: 0.6549 (acc. 60.83\%)
+| Time: 33s
+Epoch 5/120 | Train Loss: 0.6371 (acc. 64.40\%) | Val Loss: 0.6706 (acc. 61.67\%)
+| Time: 34s
+Epoch 6/120 | Train Loss: 0.6208 (acc. 65.10\%) | Val Loss: 0.6582 (acc. 62.33\%)
+| Time: 34s
+Epoch 7/120 | Train Loss: 0.6096 (acc. 66.50\%) | Val Loss: 0.6502 (acc. 65.00\%)
+| Time: 34s
+Epoch 8/120 | Train Loss: 0.5936 (acc. 67.80\%) | Val Loss: 0.6547 (acc. 66.00\%)
+| Time: 34s
+Epoch 9/120 | Train Loss: 0.5776 (acc. 69.35\%) | Val Loss: 0.5995 (acc. 68.83\%)
+| Time: 33s
+Epoch 10/120 | Train Loss: 0.5514 (acc. 70.85\%) | Val Loss: 0.6134 (acc. 68.83\%)
+| Time: 34s
+Epoch 11/120 | Train Loss: 0.5418 (acc. 71.05\%) | Val Loss: 0.5918 (acc. 71.00\%)
+| Time: 34s
+Epoch 12/120 | Train Loss: 0.5302 (acc. 72.05\%) | Val Loss: 0.5703 (acc. 71.17\%)
+| Time: 34s
+Epoch 13/120 | Train Loss: 0.5586 (acc. 70.55\%) | Val Loss: 0.5582 (acc. 71.33\%)
+| Time: 34s
+Epoch 14/120 | Train Loss: 0.5514 (acc. 71.90\%) | Val Loss: 0.5450 (acc. 73.17\%)
+| Time: 34s
+Epoch 15/120 | Train Loss: 0.5221 (acc. 73.55\%) | Val Loss: 0.5334 (acc. 72.33\%)
+| Time: 34s
+Epoch 16/120 | Train Loss: 0.4971 (acc. 76.05\%) | Val Loss: 0.5384 (acc. 75.00\%)
+| Time: 34s
+Epoch 17/120 | Train Loss: 0.5000 (acc. 76.45\%) | Val Loss: 0.5475 (acc. 72.83\%)
+| Time: 34s
+Epoch 18/120 | Train Loss: 0.4822 (acc. 77.20\%) | Val Loss: 0.5633 (acc. 72.33\%)
+| Time: 34s
+Epoch 19/120 | Train Loss: 0.4796 (acc. 77.05\%) | Val Loss: 0.5226 (acc. 77.83\%)
+| Time: 34s
+Epoch 20/120 | Train Loss: 0.4964 (acc. 76.40\%) | Val Loss: 0.5302 (acc. 74.00\%)
+| Time: 34s
+Epoch 21/120 | Train Loss: 0.4484 (acc. 78.90\%) | Val Loss: 0.6042 (acc. 74.00\%)
+| Time: 34s
+Epoch 22/120 | Train Loss: 0.4650 (acc. 79.00\%) | Val Loss: 0.5727 (acc. 70.17\%)
+| Time: 34s
+Epoch 23/120 | Train Loss: 0.4698 (acc. 77.70\%) | Val Loss: 0.5292 (acc. 75.83\%)
+| Time: 33s
+Epoch 24/120 | Train Loss: 0.4604 (acc. 78.50\%) | Val Loss: 0.4854 (acc. 77.67\%)
+| Time: 34s
+Epoch 25/120 | Train Loss: 0.4516 (acc. 78.15\%) | Val Loss: 0.5270 (acc. 76.00\%)
+| Time: 34s
+Epoch 26/120 | Train Loss: 0.4324 (acc. 79.65\%) | Val Loss: 0.4821 (acc. 77.17\%)
+| Time: 34s
+Epoch 27/120 | Train Loss: 0.4048 (acc. 80.90\%) | Val Loss: 0.4799 (acc. 79.83\%)
+| Time: 34s
+Epoch 28/120 | Train Loss: 0.4169 (acc. 80.40\%) | Val Loss: 0.5001 (acc. 80.50\%)
+| Time: 34s
+Epoch 29/120 | Train Loss: 0.4174 (acc. 79.10\%) | Val Loss: 0.4819 (acc. 80.00\%)
+| Time: 34s
+Epoch 30/120 | Train Loss: 0.3744 (acc. 83.40\%) | Val Loss: 0.5007 (acc. 80.67\%)
+| Time: 34s
+Epoch 31/120 | Train Loss: 0.3946 (acc. 82.45\%) | Val Loss: 0.5338 (acc. 75.83\%)
+| Time: 34s
+Epoch 32/120 | Train Loss: 0.3896 (acc. 82.05\%) | Val Loss: 0.4811 (acc. 79.00\%)
+| Time: 34s
+Epoch 33/120 | Train Loss: 0.3570 (acc. 83.80\%) | Val Loss: 0.4761 (acc. 80.67\%)
+| Time: 34s
+Epoch 34/120 | Train Loss: 0.3720 (acc. 83.80\%) | Val Loss: 0.5233 (acc. 81.00\%)
+| Time: 34s
+Epoch 35/120 | Train Loss: 0.3777 (acc. 83.05\%) | Val Loss: 0.4648 (acc. 78.00\%)
+| Time: 34s
+Epoch 36/120 | Train Loss: 0.3590 (acc. 84.55\%) | Val Loss: 0.4369 (acc. 82.83\%)
+| Time: 34s
+Epoch 37/120 | Train Loss: 0.3132 (acc. 85.80\%) | Val Loss: 0.5858 (acc. 78.67\%)
+| Time: 34s
+Epoch 38/120 | Train Loss: 0.3517 (acc. 83.70\%) | Val Loss: 0.4601 (acc. 81.67\%)
+| Time: 34s
+Epoch 39/120 | Train Loss: 0.3332 (acc. 84.80\%) | Val Loss: 0.4874 (acc. 82.33\%)
+| Time: 34s
+Epoch 40/120 | Train Loss: 0.3167 (acc. 85.80\%) | Val Loss: 0.4798 (acc. 80.83\%)
+| Time: 33s
+Epoch 41/120 | Train Loss: 0.3366 (acc. 84.85\%) | Val Loss: 0.4495 (acc. 80.50\%)
+| Time: 34s
+Epoch 42/120 | Train Loss: 0.3023 (acc. 86.95\%) | Val Loss: 0.4302 (acc. 83.50\%)
+| Time: 34s
+Epoch 43/120 | Train Loss: 0.3226 (acc. 86.00\%) | Val Loss: 0.5216 (acc. 77.67\%)
+| Time: 34s
+Epoch 44/120 | Train Loss: 0.3410 (acc. 85.15\%) | Val Loss: 0.4522 (acc. 81.00\%)
+| Time: 34s
+Epoch 45/120 | Train Loss: 0.2803 (acc. 87.95\%) | Val Loss: 0.5553 (acc. 80.50\%)
+| Time: 34s
+Epoch 46/120 | Train Loss: 0.2632 (acc. 88.60\%) | Val Loss: 0.4526 (acc. 83.83\%)
+| Time: 34s
+Epoch 47/120 | Train Loss: 0.2690 (acc. 88.90\%) | Val Loss: 0.4936 (acc. 83.00\%)
+| Time: 34s
+Epoch 48/120 | Train Loss: 0.2800 (acc. 87.25\%) | Val Loss: 0.7044 (acc. 80.50\%)
+| Time: 34s
+Epoch 49/120 | Train Loss: 0.3054 (acc. 85.70\%) | Val Loss: 0.4693 (acc. 80.83\%)
+| Time: 34s
+Epoch 50/120 | Train Loss: 0.2540 (acc. 88.55\%) | Val Loss: 0.4721 (acc. 83.67\%)
+| Time: 34s
+Epoch 51/120 | Train Loss: 0.2448 (acc. 89.65\%) | Val Loss: 0.5040 (acc. 83.17\%)
+| Time: 34s
+Epoch 52/120 | Train Loss: 0.2511 (acc. 89.60\%) | Val Loss: 0.4375 (acc. 84.83\%)
+| Time: 34s
+Epoch 53/120 | Train Loss: 0.2566 (acc. 89.35\%) | Val Loss: 0.5014 (acc. 82.17\%)
+| Time: 33s
+Epoch 54/120 | Train Loss: 0.2481 (acc. 89.65\%) | Val Loss: 0.4713 (acc. 85.67\%)
+| Time: 34s
+Epoch 55/120 | Train Loss: 0.2428 (acc. 90.40\%) | Val Loss: 0.5083 (acc. 84.83\%)
+| Time: 34s
+Epoch 56/120 | Train Loss: 0.2408 (acc. 89.80\%) | Val Loss: 0.4770 (acc. 84.83\%)
+| Time: 34s
+Epoch 57/120 | Train Loss: 0.2381 (acc. 89.55\%) | Val Loss: 0.4902 (acc. 84.33\%)
+| Time: 34s
+Epoch 58/120 | Train Loss: 0.2443 (acc. 89.10\%) | Val Loss: 0.4495 (acc. 85.17\%)
+| Time: 34s
+Epoch 59/120 | Train Loss: 0.2241 (acc. 90.75\%) | Val Loss: 0.5438 (acc. 83.83\%)
+| Time: 34s
+Epoch 60/120 | Train Loss: 0.2040 (acc. 91.30\%) | Val Loss: 0.4785 (acc. 83.17\%)
+| Time: 34s
+Epoch 61/120 | Train Loss: 0.1963 (acc. 91.95\%) | Val Loss: 0.4777 (acc. 84.67\%)
+| Time: 34s
+Epoch 62/120 | Train Loss: 0.1884 (acc. 91.75\%) | Val Loss: 0.4696 (acc. 85.67\%)
+| Time: 33s
+Epoch 63/120 | Train Loss: 0.1929 (acc. 92.90\%) | Val Loss: 0.4613 (acc. 82.33\%)
+| Time: 34s
+Epoch 64/120 | Train Loss: 0.2146 (acc. 91.05\%) | Val Loss: 0.4857 (acc. 83.50\%)
+| Time: 33s
+Epoch 65/120 | Train Loss: 0.1977 (acc. 92.10\%) | Val Loss: 0.4766 (acc. 84.67\%)
+| Time: 34s
+Epoch 66/120 | Train Loss: 0.2258 (acc. 90.85\%) | Val Loss: 0.4648 (acc. 82.67\%)
+| Time: 34s
+Epoch 67/120 | Train Loss: 0.2171 (acc. 90.50\%) | Val Loss: 0.5159 (acc. 82.00\%)
+| Time: 33s
+Epoch 68/120 | Train Loss: 0.1954 (acc. 92.65\%) | Val Loss: 0.5347 (acc. 85.33\%)
+| Time: 34s
+Epoch 69/120 | Train Loss: 0.1857 (acc. 92.35\%) | Val Loss: 0.5925 (acc. 83.33\%)
+| Time: 34s
+Epoch 70/120 | Train Loss: 0.1920 (acc. 92.65\%) | Val Loss: 0.5608 (acc. 85.00\%)
+| Time: 34s
+Epoch 71/120 | Train Loss: 0.2130 (acc. 91.45\%) | Val Loss: 0.5002 (acc. 84.33\%)
+| Time: 34s
+Epoch 72/120 | Train Loss: 0.1979 (acc. 91.45\%) | Val Loss: 0.4596 (acc. 84.00\%)
+| Time: 34s
+Epoch 73/120 | Train Loss: 0.1767 (acc. 92.95\%) | Val Loss: 0.5268 (acc. 83.00\%)
+| Time: 34s
+Epoch 74/120 | Train Loss: 0.1656 (acc. 94.20\%) | Val Loss: 0.4926 (acc. 84.83\%)
+| Time: 34s
+Epoch 75/120 | Train Loss: 0.1819 (acc. 92.65\%) | Val Loss: 0.4421 (acc. 85.17\%)
+| Time: 34s
+Epoch 76/120 | Train Loss: 0.1640 (acc. 93.85\%) | Val Loss: 0.5294 (acc. 83.67\%)
+| Time: 34s
+Epoch 77/120 | Train Loss: 0.1723 (acc. 92.85\%) | Val Loss: 0.5780 (acc. 85.17\%)
+| Time: 34s
+Epoch 78/120 | Train Loss: 0.1559 (acc. 93.60\%) | Val Loss: 0.5791 (acc. 82.83\%)
+| Time: 34s
+Epoch 79/120 | Train Loss: 0.1657 (acc. 92.95\%) | Val Loss: 0.5074 (acc. 83.50\%)
+| Time: 34s
+Epoch 80/120 | Train Loss: 0.1373 (acc. 94.05\%) | Val Loss: 0.6580 (acc. 84.17\%)
+| Time: 34s
+Epoch 81/120 | Train Loss: 0.1428 (acc. 94.15\%) | Val Loss: 0.6294 (acc. 83.67\%)
+| Time: 34s
+Epoch 82/120 | Train Loss: 0.1931 (acc. 92.45\%) | Val Loss: 0.5093 (acc. 86.67\%)
+| Time: 34s
+Epoch 83/120 | Train Loss: 0.1341 (acc. 94.80\%) | Val Loss: 0.5239 (acc. 85.33\%)
+| Time: 33s
+Epoch 84/120 | Train Loss: 0.1632 (acc. 93.45\%) | Val Loss: 0.5531 (acc. 85.00\%)
+| Time: 34s
+Epoch 85/120 | Train Loss: 0.1598 (acc. 93.85\%) | Val Loss: 0.4482 (acc. 85.67\%)
+| Time: 34s
+Epoch 86/120 | Train Loss: 0.1448 (acc. 94.25\%) | Val Loss: 0.6787 (acc. 86.33\%)
+| Time: 34s
+Epoch 87/120 | Train Loss: 0.1676 (acc. 93.40\%) | Val Loss: 0.4874 (acc. 85.17\%)
+| Time: 34s
+Epoch 88/120 | Train Loss: 0.1412 (acc. 94.55\%) | Val Loss: 0.5527 (acc. 86.17\%)
+| Time: 34s
+Epoch 89/120 | Train Loss: 0.1353 (acc. 94.55\%) | Val Loss: 0.5746 (acc. 85.67\%)
+| Time: 34s
+Epoch 90/120 | Train Loss: 0.1245 (acc. 95.55\%) | Val Loss: 0.5443 (acc. 85.67\%)
+| Time: 34s
+Epoch 91/120 | Train Loss: 0.1351 (acc. 95.00\%) | Val Loss: 0.5426 (acc. 84.17\%)
+| Time: 35s
+Epoch 92/120 | Train Loss: 0.1204 (acc. 95.25\%) | Val Loss: 0.5516 (acc. 86.00\%)
+| Time: 34s
+Epoch 93/120 | Train Loss: 0.1281 (acc. 94.30\%) | Val Loss: 0.6152 (acc. 84.17\%)
+| Time: 34s
+Epoch 94/120 | Train Loss: 0.1511 (acc. 93.95\%) | Val Loss: 0.5863 (acc. 86.00\%)
+| Time: 34s
+Epoch 95/120 | Train Loss: 0.1466 (acc. 94.25\%) | Val Loss: 0.5165 (acc. 85.17\%)
+| Time: 34s
+Epoch 96/120 | Train Loss: 0.1164 (acc. 95.45\%) | Val Loss: 0.5992 (acc. 86.00\%)
+| Time: 33s
+Epoch 97/120 | Train Loss: 0.1358 (acc. 94.60\%) | Val Loss: 0.5839 (acc. 85.67\%)
+| Time: 34s
+Epoch 98/120 | Train Loss: 0.1526 (acc. 93.85\%) | Val Loss: 0.5531 (acc. 86.67\%)
+| Time: 34s
+Epoch 99/120 | Train Loss: 0.1201 (acc. 95.60\%) | Val Loss: 0.5915 (acc. 86.67\%)
+| Time: 34s
+Epoch 100/120 | Train Loss: 0.1278 (acc. 94.75\%) | Val Loss: 0.5410 (acc.
+86.50\%) | Time: 34s
+Epoch 101/120 | Train Loss: 0.1037 (acc. 95.50\%) | Val Loss: 0.6229 (acc.
+85.83\%) | Time: 34s
+Epoch 102/120 | Train Loss: 0.1052 (acc. 96.05\%) | Val Loss: 0.6190 (acc.
+84.67\%) | Time: 34s
+Epoch 103/120 | Train Loss: 0.1343 (acc. 94.55\%) | Val Loss: 0.4870 (acc.
+87.17\%) | Time: 34s
+Epoch 104/120 | Train Loss: 0.1016 (acc. 95.80\%) | Val Loss: 0.6222 (acc.
+85.67\%) | Time: 34s
+Epoch 105/120 | Train Loss: 0.1025 (acc. 95.90\%) | Val Loss: 0.5933 (acc.
+86.33\%) | Time: 34s
+Epoch 106/120 | Train Loss: 0.1005 (acc. 96.00\%) | Val Loss: 0.5320 (acc.
+86.50\%) | Time: 34s
+Epoch 107/120 | Train Loss: 0.1053 (acc. 95.80\%) | Val Loss: 0.5832 (acc.
+86.67\%) | Time: 34s
+Epoch 108/120 | Train Loss: 0.0956 (acc. 96.05\%) | Val Loss: 0.5449 (acc.
+87.33\%) | Time: 34s
+Epoch 109/120 | Train Loss: 0.0990 (acc. 96.30\%) | Val Loss: 0.6869 (acc.
+86.33\%) | Time: 34s
+Epoch 110/120 | Train Loss: 0.1009 (acc. 96.60\%) | Val Loss: 0.6611 (acc.
+85.50\%) | Time: 34s
+Epoch 111/120 | Train Loss: 0.1411 (acc. 94.25\%) | Val Loss: 0.5240 (acc.
+85.00\%) | Time: 34s
+Epoch 112/120 | Train Loss: 0.1319 (acc. 94.55\%) | Val Loss: 0.7344 (acc.
+84.67\%) | Time: 34s
+Epoch 113/120 | Train Loss: 0.1309 (acc. 94.85\%) | Val Loss: 0.4805 (acc.
+86.00\%) | Time: 34s
+Epoch 114/120 | Train Loss: 0.1069 (acc. 95.80\%) | Val Loss: 0.5167 (acc.
+86.50\%) | Time: 34s
+Epoch 115/120 | Train Loss: 0.0910 (acc. 96.20\%) | Val Loss: 0.6112 (acc.
+86.17\%) | Time: 34s
+Epoch 116/120 | Train Loss: 0.1115 (acc. 95.60\%) | Val Loss: 0.4870 (acc.
+87.00\%) | Time: 34s
+Epoch 117/120 | Train Loss: 0.1119 (acc. 95.45\%) | Val Loss: 0.5688 (acc.
+85.17\%) | Time: 34s
+Epoch 118/120 | Train Loss: 0.1028 (acc. 96.25\%) | Val Loss: 0.5792 (acc.
+86.50\%) | Time: 34s
+Epoch 119/120 | Train Loss: 0.0835 (acc. 96.95\%) | Val Loss: 0.5764 (acc.
+88.50\%) | Time: 34s
+Epoch 120/120 | Train Loss: 0.0785 (acc. 97.15\%) | Val Loss: 0.7381 (acc.
+88.83\%) | Time: 34s
+Training Time: 4035s
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_42_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{Regularization}\label{regularization}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{net\PYZus{}config1} \PY{o}{=} \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}net\PYZus{}config}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}layers}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{32}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{64}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{256}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{]}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fc\PYZus{}layers}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{256}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dropout\PYZus{}rate}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mf}{0.4}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dropout\PYZus{}rate}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mf}{0.2}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{]}
+\PY{p}{\PYZcb{}}
+
+\PY{n}{train\PYZus{}config1} \PY{o}{=} \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}train\PYZus{}config}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{step\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{25}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gamma}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weight\PYZus{}decay}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mf}{1e\PYZhy{}4}\PY{p}{\PYZcb{}}
+
+\PY{n}{configs1} \PY{o}{=} \PY{p}{[}
+    \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}config}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{label}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{reg\PYZus{}1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{net\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{net\PYZus{}config1}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}config}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{label}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{reg\PYZus{}2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{net\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{net\PYZus{}config1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{train\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{train\PYZus{}config1}\PY{p}{\PYZcb{}}\PY{p}{,}
+\PY{p}{]}
+
+\PY{n}{results} \PY{o}{=} \PY{n}{result\PYZus{}handler}\PY{p}{(}\PY{n}{configs1}\PY{p}{,} \PY{n}{device}\PY{p}{)}
+\PY{n}{plot\PYZus{}scores}\PY{p}{(}\PY{n}{results}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Experiment: reg\_1
+Epoch 1/120 | Train Loss: 0.6962 (acc. 56.95\%) | Val Loss: 0.8926 (acc. 54.83\%)
+| Time: 34s
+Epoch 2/120 | Train Loss: 0.6597 (acc. 58.95\%) | Val Loss: 0.6464 (acc. 63.17\%)
+| Time: 34s
+Epoch 3/120 | Train Loss: 0.6288 (acc. 64.65\%) | Val Loss: 0.6925 (acc. 56.33\%)
+| Time: 34s
+Epoch 4/120 | Train Loss: 0.5979 (acc. 67.80\%) | Val Loss: 0.6143 (acc. 61.50\%)
+| Time: 34s
+Epoch 5/120 | Train Loss: 0.5828 (acc. 68.55\%) | Val Loss: 0.6010 (acc. 70.17\%)
+| Time: 34s
+Epoch 6/120 | Train Loss: 0.5800 (acc. 68.15\%) | Val Loss: 0.6204 (acc. 69.33\%)
+| Time: 34s
+Epoch 7/120 | Train Loss: 0.5622 (acc. 70.75\%) | Val Loss: 0.6065 (acc. 68.17\%)
+| Time: 34s
+Epoch 8/120 | Train Loss: 0.5561 (acc. 72.35\%) | Val Loss: 0.5784 (acc. 71.33\%)
+| Time: 34s
+Epoch 9/120 | Train Loss: 0.5447 (acc. 72.15\%) | Val Loss: 0.5474 (acc. 71.67\%)
+| Time: 34s
+Epoch 10/120 | Train Loss: 0.5238 (acc. 73.80\%) | Val Loss: 0.6497 (acc. 66.00\%)
+| Time: 34s
+Epoch 11/120 | Train Loss: 0.5209 (acc. 74.15\%) | Val Loss: 0.5724 (acc. 71.17\%)
+| Time: 34s
+Epoch 12/120 | Train Loss: 0.5160 (acc. 73.65\%) | Val Loss: 0.6286 (acc. 67.50\%)
+| Time: 34s
+Epoch 13/120 | Train Loss: 0.5104 (acc. 74.75\%) | Val Loss: 0.6504 (acc. 68.50\%)
+| Time: 34s
+Epoch 14/120 | Train Loss: 0.4879 (acc. 75.85\%) | Val Loss: 0.5559 (acc. 73.50\%)
+| Time: 34s
+Epoch 15/120 | Train Loss: 0.4844 (acc. 76.60\%) | Val Loss: 0.5910 (acc. 72.17\%)
+| Time: 34s
+Epoch 16/120 | Train Loss: 0.4893 (acc. 76.20\%) | Val Loss: 0.6220 (acc. 70.50\%)
+| Time: 34s
+Epoch 17/120 | Train Loss: 0.4809 (acc. 77.30\%) | Val Loss: 0.5460 (acc. 71.00\%)
+| Time: 34s
+Epoch 18/120 | Train Loss: 0.4896 (acc. 76.25\%) | Val Loss: 0.5584 (acc. 71.00\%)
+| Time: 34s
+Epoch 19/120 | Train Loss: 0.4742 (acc. 77.50\%) | Val Loss: 0.5032 (acc. 75.67\%)
+| Time: 34s
+Epoch 20/120 | Train Loss: 0.4576 (acc. 78.55\%) | Val Loss: 0.4965 (acc. 75.83\%)
+| Time: 34s
+Epoch 21/120 | Train Loss: 0.4478 (acc. 78.45\%) | Val Loss: 0.5090 (acc. 75.33\%)
+| Time: 34s
+Epoch 22/120 | Train Loss: 0.4220 (acc. 81.10\%) | Val Loss: 0.5131 (acc. 77.83\%)
+| Time: 34s
+Epoch 23/120 | Train Loss: 0.4385 (acc. 79.40\%) | Val Loss: 0.5742 (acc. 71.17\%)
+| Time: 34s
+Epoch 24/120 | Train Loss: 0.4452 (acc. 78.00\%) | Val Loss: 0.5460 (acc. 72.67\%)
+| Time: 34s
+Epoch 25/120 | Train Loss: 0.4184 (acc. 81.15\%) | Val Loss: 0.4871 (acc. 77.00\%)
+| Time: 34s
+Epoch 26/120 | Train Loss: 0.4355 (acc. 80.25\%) | Val Loss: 0.4897 (acc. 77.67\%)
+| Time: 34s
+Epoch 27/120 | Train Loss: 0.4517 (acc. 79.40\%) | Val Loss: 0.4839 (acc. 75.33\%)
+| Time: 34s
+Epoch 28/120 | Train Loss: 0.4137 (acc. 82.15\%) | Val Loss: 0.4873 (acc. 76.67\%)
+| Time: 34s
+Epoch 29/120 | Train Loss: 0.4234 (acc. 80.20\%) | Val Loss: 0.6243 (acc. 69.50\%)
+| Time: 34s
+Epoch 30/120 | Train Loss: 0.4175 (acc. 81.00\%) | Val Loss: 0.4784 (acc. 78.00\%)
+| Time: 34s
+Epoch 31/120 | Train Loss: 0.3980 (acc. 81.00\%) | Val Loss: 0.4372 (acc. 80.67\%)
+| Time: 34s
+Epoch 32/120 | Train Loss: 0.3954 (acc. 81.20\%) | Val Loss: 0.5249 (acc. 76.83\%)
+| Time: 34s
+Epoch 33/120 | Train Loss: 0.3764 (acc. 82.85\%) | Val Loss: 0.4968 (acc. 76.67\%)
+| Time: 34s
+Epoch 34/120 | Train Loss: 0.3727 (acc. 84.40\%) | Val Loss: 0.4571 (acc. 80.17\%)
+| Time: 34s
+Epoch 35/120 | Train Loss: 0.3894 (acc. 82.70\%) | Val Loss: 0.4526 (acc. 79.33\%)
+| Time: 34s
+Epoch 36/120 | Train Loss: 0.3736 (acc. 82.20\%) | Val Loss: 0.4761 (acc. 78.33\%)
+| Time: 34s
+Epoch 37/120 | Train Loss: 0.3521 (acc. 84.20\%) | Val Loss: 0.4387 (acc. 81.00\%)
+| Time: 34s
+Epoch 38/120 | Train Loss: 0.3841 (acc. 82.60\%) | Val Loss: 0.4475 (acc. 80.83\%)
+| Time: 34s
+Epoch 39/120 | Train Loss: 0.3636 (acc. 84.70\%) | Val Loss: 0.4355 (acc. 80.50\%)
+| Time: 34s
+Epoch 40/120 | Train Loss: 0.3646 (acc. 84.25\%) | Val Loss: 0.4286 (acc. 80.67\%)
+| Time: 34s
+Epoch 41/120 | Train Loss: 0.3341 (acc. 85.10\%) | Val Loss: 0.4978 (acc. 79.33\%)
+| Time: 34s
+Epoch 42/120 | Train Loss: 0.3456 (acc. 85.15\%) | Val Loss: 0.4592 (acc. 81.50\%)
+| Time: 34s
+Epoch 43/120 | Train Loss: 0.3361 (acc. 86.00\%) | Val Loss: 0.6471 (acc. 70.50\%)
+| Time: 34s
+Epoch 44/120 | Train Loss: 0.3250 (acc. 85.95\%) | Val Loss: 0.4087 (acc. 81.50\%)
+| Time: 34s
+Epoch 45/120 | Train Loss: 0.3379 (acc. 85.60\%) | Val Loss: 0.4383 (acc. 79.83\%)
+| Time: 34s
+Epoch 46/120 | Train Loss: 0.3135 (acc. 86.95\%) | Val Loss: 0.4213 (acc. 82.33\%)
+| Time: 34s
+Epoch 47/120 | Train Loss: 0.3069 (acc. 86.90\%) | Val Loss: 0.4665 (acc. 80.67\%)
+| Time: 34s
+Epoch 48/120 | Train Loss: 0.3151 (acc. 86.00\%) | Val Loss: 0.4264 (acc. 80.67\%)
+| Time: 34s
+Epoch 49/120 | Train Loss: 0.3276 (acc. 86.00\%) | Val Loss: 0.3953 (acc. 83.17\%)
+| Time: 34s
+Epoch 50/120 | Train Loss: 0.3132 (acc. 86.35\%) | Val Loss: 0.4257 (acc. 82.50\%)
+| Time: 34s
+Epoch 51/120 | Train Loss: 0.3066 (acc. 87.05\%) | Val Loss: 0.5127 (acc. 78.83\%)
+| Time: 34s
+Epoch 52/120 | Train Loss: 0.3112 (acc. 86.45\%) | Val Loss: 0.5312 (acc. 78.50\%)
+| Time: 34s
+Epoch 53/120 | Train Loss: 0.3156 (acc. 86.65\%) | Val Loss: 0.3942 (acc. 83.50\%)
+| Time: 34s
+Epoch 54/120 | Train Loss: 0.3116 (acc. 86.35\%) | Val Loss: 0.4176 (acc. 81.83\%)
+| Time: 34s
+Epoch 55/120 | Train Loss: 0.2975 (acc. 87.35\%) | Val Loss: 0.4386 (acc. 83.50\%)
+| Time: 34s
+Epoch 56/120 | Train Loss: 0.3050 (acc. 86.00\%) | Val Loss: 0.7170 (acc. 74.00\%)
+| Time: 34s
+Epoch 57/120 | Train Loss: 0.3050 (acc. 87.30\%) | Val Loss: 0.4180 (acc. 80.67\%)
+| Time: 34s
+Epoch 58/120 | Train Loss: 0.3050 (acc. 87.45\%) | Val Loss: 0.4370 (acc. 83.00\%)
+| Time: 34s
+Epoch 59/120 | Train Loss: 0.3016 (acc. 87.30\%) | Val Loss: 0.3755 (acc. 83.50\%)
+| Time: 34s
+Epoch 60/120 | Train Loss: 0.2823 (acc. 87.10\%) | Val Loss: 0.4339 (acc. 82.50\%)
+| Time: 34s
+Epoch 61/120 | Train Loss: 0.2761 (acc. 88.35\%) | Val Loss: 0.4827 (acc. 80.83\%)
+| Time: 34s
+Epoch 62/120 | Train Loss: 0.2846 (acc. 87.85\%) | Val Loss: 0.4043 (acc. 84.00\%)
+| Time: 34s
+Epoch 63/120 | Train Loss: 0.3026 (acc. 86.60\%) | Val Loss: 0.4255 (acc. 81.83\%)
+| Time: 34s
+Epoch 64/120 | Train Loss: 0.2699 (acc. 88.85\%) | Val Loss: 0.5582 (acc. 81.83\%)
+| Time: 34s
+Epoch 65/120 | Train Loss: 0.2812 (acc. 87.60\%) | Val Loss: 0.4267 (acc. 84.67\%)
+| Time: 34s
+Epoch 66/120 | Train Loss: 0.2652 (acc. 89.10\%) | Val Loss: 0.4230 (acc. 83.00\%)
+| Time: 34s
+Epoch 67/120 | Train Loss: 0.2534 (acc. 89.50\%) | Val Loss: 0.4107 (acc. 84.50\%)
+| Time: 34s
+Epoch 68/120 | Train Loss: 0.2712 (acc. 88.05\%) | Val Loss: 0.3898 (acc. 83.83\%)
+| Time: 34s
+Epoch 69/120 | Train Loss: 0.2681 (acc. 88.85\%) | Val Loss: 0.4008 (acc. 83.00\%)
+| Time: 34s
+Epoch 70/120 | Train Loss: 0.2444 (acc. 89.45\%) | Val Loss: 0.3871 (acc. 85.33\%)
+| Time: 34s
+Epoch 71/120 | Train Loss: 0.2469 (acc. 89.15\%) | Val Loss: 0.4005 (acc. 83.00\%)
+| Time: 34s
+Epoch 72/120 | Train Loss: 0.2669 (acc. 89.15\%) | Val Loss: 0.3852 (acc. 82.83\%)
+| Time: 34s
+Epoch 73/120 | Train Loss: 0.2582 (acc. 88.95\%) | Val Loss: 0.3484 (acc. 87.33\%)
+| Time: 34s
+Epoch 74/120 | Train Loss: 0.2702 (acc. 89.15\%) | Val Loss: 0.3432 (acc. 86.67\%)
+| Time: 34s
+Epoch 75/120 | Train Loss: 0.2332 (acc. 90.90\%) | Val Loss: 0.4229 (acc. 84.33\%)
+| Time: 34s
+Epoch 76/120 | Train Loss: 0.2543 (acc. 89.50\%) | Val Loss: 0.4300 (acc. 84.33\%)
+| Time: 34s
+Epoch 77/120 | Train Loss: 0.2333 (acc. 90.00\%) | Val Loss: 0.4691 (acc. 83.50\%)
+| Time: 34s
+Epoch 78/120 | Train Loss: 0.2250 (acc. 90.50\%) | Val Loss: 0.4165 (acc. 84.67\%)
+| Time: 34s
+Epoch 79/120 | Train Loss: 0.2584 (acc. 87.75\%) | Val Loss: 0.4136 (acc. 84.50\%)
+| Time: 34s
+Epoch 80/120 | Train Loss: 0.2141 (acc. 90.85\%) | Val Loss: 0.4059 (acc. 86.00\%)
+| Time: 34s
+Epoch 81/120 | Train Loss: 0.2380 (acc. 89.85\%) | Val Loss: 0.3663 (acc. 85.33\%)
+| Time: 34s
+Epoch 82/120 | Train Loss: 0.2045 (acc. 91.65\%) | Val Loss: 0.3784 (acc. 86.50\%)
+| Time: 34s
+Epoch 83/120 | Train Loss: 0.2251 (acc. 90.80\%) | Val Loss: 0.4138 (acc. 85.33\%)
+| Time: 34s
+Epoch 84/120 | Train Loss: 0.2103 (acc. 91.55\%) | Val Loss: 0.4051 (acc. 85.67\%)
+| Time: 34s
+Epoch 85/120 | Train Loss: 0.2098 (acc. 90.80\%) | Val Loss: 0.4096 (acc. 86.00\%)
+| Time: 34s
+Epoch 86/120 | Train Loss: 0.2307 (acc. 90.75\%) | Val Loss: 0.5740 (acc. 78.33\%)
+| Time: 34s
+Epoch 87/120 | Train Loss: 0.2109 (acc. 91.40\%) | Val Loss: 0.4140 (acc. 86.00\%)
+| Time: 34s
+Epoch 88/120 | Train Loss: 0.2360 (acc. 90.40\%) | Val Loss: 0.6556 (acc. 79.67\%)
+| Time: 34s
+Epoch 89/120 | Train Loss: 0.2013 (acc. 91.50\%) | Val Loss: 0.3833 (acc. 87.17\%)
+| Time: 34s
+Epoch 90/120 | Train Loss: 0.1938 (acc. 92.55\%) | Val Loss: 0.3877 (acc. 85.00\%)
+| Time: 34s
+Epoch 91/120 | Train Loss: 0.1927 (acc. 92.95\%) | Val Loss: 0.4278 (acc. 85.17\%)
+| Time: 34s
+Epoch 92/120 | Train Loss: 0.2265 (acc. 91.05\%) | Val Loss: 0.4150 (acc. 84.83\%)
+| Time: 34s
+Epoch 93/120 | Train Loss: 0.2065 (acc. 91.95\%) | Val Loss: 0.3894 (acc. 85.17\%)
+| Time: 34s
+Epoch 94/120 | Train Loss: 0.1946 (acc. 91.65\%) | Val Loss: 0.3629 (acc. 86.83\%)
+| Time: 34s
+Epoch 95/120 | Train Loss: 0.1932 (acc. 92.35\%) | Val Loss: 0.8695 (acc. 73.67\%)
+| Time: 34s
+Epoch 96/120 | Train Loss: 0.2053 (acc. 92.25\%) | Val Loss: 0.4317 (acc. 85.50\%)
+| Time: 34s
+Epoch 97/120 | Train Loss: 0.1840 (acc. 93.00\%) | Val Loss: 0.4594 (acc. 85.00\%)
+| Time: 34s
+Epoch 98/120 | Train Loss: 0.2060 (acc. 91.90\%) | Val Loss: 0.4642 (acc. 82.50\%)
+| Time: 34s
+Epoch 99/120 | Train Loss: 0.1801 (acc. 92.45\%) | Val Loss: 0.3906 (acc. 85.50\%)
+| Time: 34s
+Epoch 100/120 | Train Loss: 0.1802 (acc. 93.25\%) | Val Loss: 0.4055 (acc.
+86.67\%) | Time: 34s
+Epoch 101/120 | Train Loss: 0.1609 (acc. 93.85\%) | Val Loss: 0.4797 (acc.
+84.50\%) | Time: 34s
+Epoch 102/120 | Train Loss: 0.1848 (acc. 93.05\%) | Val Loss: 0.5259 (acc.
+83.67\%) | Time: 34s
+Epoch 103/120 | Train Loss: 0.1772 (acc. 92.55\%) | Val Loss: 0.6819 (acc.
+79.17\%) | Time: 34s
+Epoch 104/120 | Train Loss: 0.1614 (acc. 93.15\%) | Val Loss: 0.3821 (acc.
+86.83\%) | Time: 34s
+Epoch 105/120 | Train Loss: 0.1660 (acc. 93.20\%) | Val Loss: 0.4707 (acc.
+85.33\%) | Time: 34s
+Epoch 106/120 | Train Loss: 0.1755 (acc. 93.05\%) | Val Loss: 0.4738 (acc.
+86.00\%) | Time: 34s
+Epoch 107/120 | Train Loss: 0.1603 (acc. 93.75\%) | Val Loss: 0.4198 (acc.
+86.17\%) | Time: 34s
+Epoch 108/120 | Train Loss: 0.1622 (acc. 93.65\%) | Val Loss: 0.4181 (acc.
+85.83\%) | Time: 34s
+Epoch 109/120 | Train Loss: 0.1887 (acc. 91.50\%) | Val Loss: 0.7485 (acc.
+81.00\%) | Time: 34s
+Epoch 110/120 | Train Loss: 0.1603 (acc. 94.00\%) | Val Loss: 0.4439 (acc.
+85.50\%) | Time: 34s
+Epoch 111/120 | Train Loss: 0.1324 (acc. 94.55\%) | Val Loss: 0.3805 (acc.
+87.83\%) | Time: 34s
+Epoch 112/120 | Train Loss: 0.1569 (acc. 93.70\%) | Val Loss: 0.4204 (acc.
+87.00\%) | Time: 34s
+Epoch 113/120 | Train Loss: 0.1614 (acc. 92.95\%) | Val Loss: 0.4518 (acc.
+85.67\%) | Time: 34s
+Epoch 114/120 | Train Loss: 0.1423 (acc. 94.70\%) | Val Loss: 0.5452 (acc.
+84.83\%) | Time: 34s
+Epoch 115/120 | Train Loss: 0.1704 (acc. 93.15\%) | Val Loss: 0.4222 (acc.
+86.17\%) | Time: 34s
+Epoch 116/120 | Train Loss: 0.1626 (acc. 92.75\%) | Val Loss: 0.3715 (acc.
+87.50\%) | Time: 34s
+Epoch 117/120 | Train Loss: 0.1605 (acc. 93.40\%) | Val Loss: 0.4975 (acc.
+85.00\%) | Time: 34s
+Epoch 118/120 | Train Loss: 0.1431 (acc. 93.75\%) | Val Loss: 0.7164 (acc.
+81.00\%) | Time: 34s
+Epoch 119/120 | Train Loss: 0.1447 (acc. 93.85\%) | Val Loss: 0.4568 (acc.
+86.17\%) | Time: 34s
+Epoch 120/120 | Train Loss: 0.1490 (acc. 94.25\%) | Val Loss: 0.3999 (acc.
+87.67\%) | Time: 34s
+Training Time: 4112s
+
+Experiment: reg\_2
+Epoch 1/120 | Train Loss: 0.6836 (acc. 59.30\%) | Val Loss: 0.6645 (acc. 60.33\%)
+| Time: 34s
+Epoch 2/120 | Train Loss: 0.6343 (acc. 63.45\%) | Val Loss: 0.7115 (acc. 60.00\%)
+| Time: 34s
+Epoch 3/120 | Train Loss: 0.6051 (acc. 65.35\%) | Val Loss: 0.6021 (acc. 67.83\%)
+| Time: 34s
+Epoch 4/120 | Train Loss: 0.5782 (acc. 69.55\%) | Val Loss: 0.6000 (acc. 68.50\%)
+| Time: 34s
+Epoch 5/120 | Train Loss: 0.5681 (acc. 70.35\%) | Val Loss: 0.6545 (acc. 61.83\%)
+| Time: 34s
+Epoch 6/120 | Train Loss: 0.5626 (acc. 70.25\%) | Val Loss: 0.6416 (acc. 65.83\%)
+| Time: 34s
+Epoch 7/120 | Train Loss: 0.5540 (acc. 70.65\%) | Val Loss: 0.5522 (acc. 71.83\%)
+| Time: 34s
+Epoch 8/120 | Train Loss: 0.5263 (acc. 72.70\%) | Val Loss: 0.5408 (acc. 73.67\%)
+| Time: 34s
+Epoch 9/120 | Train Loss: 0.5294 (acc. 74.80\%) | Val Loss: 0.5783 (acc. 66.67\%)
+| Time: 34s
+Epoch 10/120 | Train Loss: 0.5449 (acc. 73.15\%) | Val Loss: 0.5389 (acc. 72.67\%)
+| Time: 34s
+Epoch 11/120 | Train Loss: 0.5085 (acc. 73.80\%) | Val Loss: 0.5492 (acc. 72.50\%)
+| Time: 34s
+Epoch 12/120 | Train Loss: 0.5174 (acc. 75.65\%) | Val Loss: 0.5291 (acc. 74.17\%)
+| Time: 34s
+Epoch 13/120 | Train Loss: 0.5021 (acc. 75.25\%) | Val Loss: 0.5505 (acc. 72.83\%)
+| Time: 34s
+Epoch 14/120 | Train Loss: 0.4755 (acc. 77.80\%) | Val Loss: 0.5586 (acc. 73.17\%)
+| Time: 34s
+Epoch 15/120 | Train Loss: 0.5140 (acc. 75.05\%) | Val Loss: 0.5026 (acc. 75.67\%)
+| Time: 34s
+Epoch 16/120 | Train Loss: 0.4761 (acc. 77.00\%) | Val Loss: 0.5039 (acc. 75.33\%)
+| Time: 34s
+Epoch 17/120 | Train Loss: 0.4528 (acc. 79.15\%) | Val Loss: 0.5285 (acc. 75.00\%)
+| Time: 34s
+Epoch 18/120 | Train Loss: 0.4641 (acc. 78.05\%) | Val Loss: 0.4713 (acc. 77.33\%)
+| Time: 34s
+Epoch 19/120 | Train Loss: 0.4549 (acc. 78.20\%) | Val Loss: 0.6147 (acc. 72.17\%)
+| Time: 34s
+Epoch 20/120 | Train Loss: 0.4364 (acc. 79.45\%) | Val Loss: 0.5405 (acc. 77.00\%)
+| Time: 34s
+Epoch 21/120 | Train Loss: 0.4396 (acc. 80.25\%) | Val Loss: 0.5171 (acc. 76.33\%)
+| Time: 34s
+Epoch 22/120 | Train Loss: 0.4259 (acc. 81.00\%) | Val Loss: 0.4854 (acc. 76.17\%)
+| Time: 34s
+Epoch 23/120 | Train Loss: 0.4458 (acc. 80.75\%) | Val Loss: 0.4847 (acc. 75.67\%)
+| Time: 34s
+Epoch 24/120 | Train Loss: 0.4250 (acc. 80.05\%) | Val Loss: 0.4432 (acc. 79.17\%)
+| Time: 34s
+Epoch 25/120 | Train Loss: 0.4174 (acc. 80.80\%) | Val Loss: 0.5482 (acc. 72.50\%)
+| Time: 34s
+Epoch 26/120 | Train Loss: 0.3966 (acc. 83.20\%) | Val Loss: 0.4327 (acc. 79.83\%)
+| Time: 34s
+Epoch 27/120 | Train Loss: 0.3544 (acc. 84.80\%) | Val Loss: 0.4410 (acc. 79.50\%)
+| Time: 34s
+Epoch 28/120 | Train Loss: 0.3779 (acc. 83.60\%) | Val Loss: 0.5682 (acc. 78.00\%)
+| Time: 34s
+Epoch 29/120 | Train Loss: 0.3680 (acc. 83.10\%) | Val Loss: 0.4246 (acc. 80.00\%)
+| Time: 34s
+Epoch 30/120 | Train Loss: 0.3695 (acc. 83.45\%) | Val Loss: 0.4102 (acc. 81.83\%)
+| Time: 34s
+Epoch 31/120 | Train Loss: 0.3606 (acc. 83.85\%) | Val Loss: 0.4239 (acc. 79.50\%)
+| Time: 34s
+Epoch 32/120 | Train Loss: 0.3457 (acc. 85.00\%) | Val Loss: 0.4096 (acc. 81.83\%)
+| Time: 34s
+Epoch 33/120 | Train Loss: 0.3729 (acc. 83.15\%) | Val Loss: 0.4049 (acc. 81.67\%)
+| Time: 34s
+Epoch 34/120 | Train Loss: 0.3425 (acc. 85.30\%) | Val Loss: 0.4355 (acc. 78.67\%)
+| Time: 34s
+Epoch 35/120 | Train Loss: 0.3354 (acc. 85.30\%) | Val Loss: 0.4183 (acc. 79.17\%)
+| Time: 34s
+Epoch 36/120 | Train Loss: 0.3577 (acc. 85.05\%) | Val Loss: 0.4828 (acc. 80.33\%)
+| Time: 34s
+Epoch 37/120 | Train Loss: 0.3456 (acc. 84.60\%) | Val Loss: 0.3931 (acc. 82.50\%)
+| Time: 34s
+Epoch 38/120 | Train Loss: 0.3322 (acc. 85.55\%) | Val Loss: 0.3965 (acc. 83.17\%)
+| Time: 34s
+Epoch 39/120 | Train Loss: 0.3058 (acc. 86.40\%) | Val Loss: 0.4111 (acc. 82.83\%)
+| Time: 35s
+Epoch 40/120 | Train Loss: 0.3404 (acc. 85.35\%) | Val Loss: 0.4212 (acc. 79.83\%)
+| Time: 34s
+Epoch 41/120 | Train Loss: 0.3401 (acc. 85.35\%) | Val Loss: 0.4509 (acc. 80.83\%)
+| Time: 34s
+Epoch 42/120 | Train Loss: 0.2948 (acc. 87.25\%) | Val Loss: 0.3992 (acc. 82.67\%)
+| Time: 34s
+Epoch 43/120 | Train Loss: 0.3022 (acc. 86.25\%) | Val Loss: 0.3992 (acc. 83.00\%)
+| Time: 34s
+Epoch 44/120 | Train Loss: 0.3162 (acc. 86.10\%) | Val Loss: 0.4753 (acc. 81.50\%)
+| Time: 34s
+Epoch 45/120 | Train Loss: 0.3307 (acc. 85.55\%) | Val Loss: 0.4022 (acc. 82.17\%)
+| Time: 34s
+Epoch 46/120 | Train Loss: 0.3134 (acc. 86.85\%) | Val Loss: 0.3986 (acc. 83.33\%)
+| Time: 34s
+Epoch 47/120 | Train Loss: 0.3016 (acc. 86.40\%) | Val Loss: 0.5512 (acc. 76.83\%)
+| Time: 34s
+Epoch 48/120 | Train Loss: 0.3121 (acc. 86.80\%) | Val Loss: 0.4064 (acc. 82.17\%)
+| Time: 34s
+Epoch 49/120 | Train Loss: 0.3283 (acc. 86.20\%) | Val Loss: 0.4151 (acc. 81.83\%)
+| Time: 34s
+Epoch 50/120 | Train Loss: 0.2865 (acc. 87.75\%) | Val Loss: 0.4047 (acc. 80.00\%)
+| Time: 34s
+Epoch 51/120 | Train Loss: 0.2695 (acc. 89.45\%) | Val Loss: 0.5261 (acc. 78.67\%)
+| Time: 34s
+Epoch 52/120 | Train Loss: 0.2730 (acc. 88.40\%) | Val Loss: 0.3803 (acc. 83.00\%)
+| Time: 34s
+Epoch 53/120 | Train Loss: 0.2533 (acc. 89.05\%) | Val Loss: 0.3699 (acc. 83.00\%)
+| Time: 34s
+Epoch 54/120 | Train Loss: 0.2447 (acc. 90.15\%) | Val Loss: 0.3862 (acc. 82.50\%)
+| Time: 34s
+Epoch 55/120 | Train Loss: 0.2711 (acc. 88.95\%) | Val Loss: 0.4081 (acc. 82.17\%)
+| Time: 34s
+Epoch 56/120 | Train Loss: 0.2641 (acc. 88.65\%) | Val Loss: 0.3790 (acc. 83.67\%)
+| Time: 34s
+Epoch 57/120 | Train Loss: 0.2395 (acc. 90.30\%) | Val Loss: 0.3818 (acc. 84.17\%)
+| Time: 34s
+Epoch 58/120 | Train Loss: 0.2488 (acc. 89.30\%) | Val Loss: 0.4039 (acc. 83.33\%)
+| Time: 34s
+Epoch 59/120 | Train Loss: 0.2345 (acc. 89.45\%) | Val Loss: 0.4069 (acc. 83.33\%)
+| Time: 34s
+Epoch 60/120 | Train Loss: 0.2545 (acc. 89.45\%) | Val Loss: 0.3925 (acc. 81.67\%)
+| Time: 34s
+Epoch 61/120 | Train Loss: 0.2547 (acc. 89.15\%) | Val Loss: 0.3998 (acc. 82.00\%)
+| Time: 34s
+Epoch 62/120 | Train Loss: 0.2528 (acc. 89.35\%) | Val Loss: 0.3963 (acc. 83.33\%)
+| Time: 34s
+Epoch 63/120 | Train Loss: 0.2303 (acc. 90.40\%) | Val Loss: 0.3564 (acc. 84.17\%)
+| Time: 34s
+Epoch 64/120 | Train Loss: 0.2378 (acc. 89.85\%) | Val Loss: 0.3902 (acc. 83.17\%)
+| Time: 34s
+Epoch 65/120 | Train Loss: 0.2459 (acc. 90.00\%) | Val Loss: 0.4037 (acc. 83.33\%)
+| Time: 34s
+Epoch 66/120 | Train Loss: 0.2132 (acc. 91.40\%) | Val Loss: 0.4060 (acc. 82.50\%)
+| Time: 34s
+Epoch 67/120 | Train Loss: 0.2265 (acc. 90.70\%) | Val Loss: 0.4332 (acc. 82.83\%)
+| Time: 34s
+Epoch 68/120 | Train Loss: 0.2146 (acc. 91.25\%) | Val Loss: 0.4085 (acc. 82.83\%)
+| Time: 34s
+Epoch 69/120 | Train Loss: 0.2202 (acc. 90.65\%) | Val Loss: 0.3930 (acc. 83.83\%)
+| Time: 34s
+Epoch 70/120 | Train Loss: 0.2231 (acc. 90.00\%) | Val Loss: 0.3705 (acc. 82.83\%)
+| Time: 34s
+Epoch 71/120 | Train Loss: 0.2257 (acc. 90.90\%) | Val Loss: 0.5548 (acc. 79.50\%)
+| Time: 34s
+Epoch 72/120 | Train Loss: 0.2224 (acc. 90.10\%) | Val Loss: 0.3889 (acc. 85.33\%)
+| Time: 34s
+Epoch 73/120 | Train Loss: 0.2189 (acc. 90.40\%) | Val Loss: 0.3737 (acc. 82.83\%)
+| Time: 34s
+Epoch 74/120 | Train Loss: 0.2150 (acc. 91.35\%) | Val Loss: 0.3786 (acc. 85.00\%)
+| Time: 34s
+Epoch 75/120 | Train Loss: 0.1934 (acc. 91.40\%) | Val Loss: 0.4055 (acc. 84.50\%)
+| Time: 34s
+Epoch 76/120 | Train Loss: 0.2077 (acc. 91.25\%) | Val Loss: 0.3716 (acc. 83.33\%)
+| Time: 34s
+Epoch 77/120 | Train Loss: 0.1775 (acc. 92.90\%) | Val Loss: 0.3672 (acc. 85.33\%)
+| Time: 34s
+Epoch 78/120 | Train Loss: 0.1895 (acc. 91.70\%) | Val Loss: 0.3786 (acc. 85.17\%)
+| Time: 34s
+Epoch 79/120 | Train Loss: 0.1848 (acc. 92.00\%) | Val Loss: 0.3830 (acc. 84.50\%)
+| Time: 34s
+Epoch 80/120 | Train Loss: 0.1781 (acc. 92.90\%) | Val Loss: 0.3858 (acc. 84.50\%)
+| Time: 34s
+Epoch 81/120 | Train Loss: 0.1880 (acc. 92.50\%) | Val Loss: 0.3819 (acc. 84.33\%)
+| Time: 34s
+Epoch 82/120 | Train Loss: 0.1884 (acc. 92.70\%) | Val Loss: 0.4351 (acc. 84.17\%)
+| Time: 34s
+Epoch 83/120 | Train Loss: 0.2066 (acc. 92.20\%) | Val Loss: 0.4312 (acc. 84.50\%)
+| Time: 34s
+Epoch 84/120 | Train Loss: 0.1839 (acc. 92.30\%) | Val Loss: 0.3898 (acc. 84.67\%)
+| Time: 34s
+Epoch 85/120 | Train Loss: 0.1813 (acc. 92.65\%) | Val Loss: 0.4003 (acc. 84.67\%)
+| Time: 34s
+Epoch 86/120 | Train Loss: 0.1831 (acc. 92.30\%) | Val Loss: 0.3869 (acc. 84.67\%)
+| Time: 34s
+Epoch 87/120 | Train Loss: 0.1765 (acc. 93.15\%) | Val Loss: 0.3765 (acc. 84.50\%)
+| Time: 34s
+Epoch 88/120 | Train Loss: 0.1671 (acc. 93.00\%) | Val Loss: 0.3776 (acc. 84.17\%)
+| Time: 34s
+Epoch 89/120 | Train Loss: 0.1641 (acc. 93.55\%) | Val Loss: 0.3761 (acc. 85.50\%)
+| Time: 34s
+Epoch 90/120 | Train Loss: 0.1715 (acc. 92.65\%) | Val Loss: 0.4062 (acc. 84.83\%)
+| Time: 34s
+Epoch 91/120 | Train Loss: 0.1762 (acc. 92.65\%) | Val Loss: 0.3752 (acc. 85.67\%)
+| Time: 34s
+Epoch 92/120 | Train Loss: 0.1673 (acc. 93.35\%) | Val Loss: 0.4252 (acc. 83.67\%)
+| Time: 34s
+Epoch 93/120 | Train Loss: 0.1655 (acc. 93.70\%) | Val Loss: 0.3844 (acc. 85.33\%)
+| Time: 34s
+Epoch 94/120 | Train Loss: 0.1607 (acc. 93.30\%) | Val Loss: 0.3873 (acc. 85.83\%)
+| Time: 34s
+Epoch 95/120 | Train Loss: 0.1577 (acc. 93.45\%) | Val Loss: 0.3750 (acc. 84.67\%)
+| Time: 34s
+Epoch 96/120 | Train Loss: 0.1712 (acc. 93.15\%) | Val Loss: 0.3911 (acc. 85.67\%)
+| Time: 34s
+Epoch 97/120 | Train Loss: 0.1462 (acc. 94.35\%) | Val Loss: 0.3730 (acc. 85.67\%)
+| Time: 34s
+Epoch 98/120 | Train Loss: 0.1576 (acc. 93.35\%) | Val Loss: 0.4075 (acc. 84.67\%)
+| Time: 34s
+Epoch 99/120 | Train Loss: 0.1636 (acc. 93.60\%) | Val Loss: 0.3994 (acc. 85.17\%)
+| Time: 34s
+Epoch 100/120 | Train Loss: 0.1412 (acc. 94.25\%) | Val Loss: 0.4108 (acc.
+85.17\%) | Time: 34s
+Epoch 101/120 | Train Loss: 0.1632 (acc. 93.05\%) | Val Loss: 0.3921 (acc.
+86.17\%) | Time: 34s
+Epoch 102/120 | Train Loss: 0.1473 (acc. 94.10\%) | Val Loss: 0.3816 (acc.
+86.50\%) | Time: 34s
+Epoch 103/120 | Train Loss: 0.1616 (acc. 93.85\%) | Val Loss: 0.3904 (acc.
+86.83\%) | Time: 34s
+Epoch 104/120 | Train Loss: 0.1503 (acc. 94.05\%) | Val Loss: 0.4195 (acc.
+85.33\%) | Time: 34s
+Epoch 105/120 | Train Loss: 0.1607 (acc. 93.95\%) | Val Loss: 0.3830 (acc.
+86.17\%) | Time: 34s
+Epoch 106/120 | Train Loss: 0.1445 (acc. 94.15\%) | Val Loss: 0.3717 (acc.
+86.67\%) | Time: 34s
+Epoch 107/120 | Train Loss: 0.1506 (acc. 93.90\%) | Val Loss: 0.3647 (acc.
+85.50\%) | Time: 34s
+Epoch 108/120 | Train Loss: 0.1465 (acc. 93.80\%) | Val Loss: 0.3742 (acc.
+85.67\%) | Time: 34s
+Epoch 109/120 | Train Loss: 0.1480 (acc. 94.65\%) | Val Loss: 0.3903 (acc.
+85.17\%) | Time: 34s
+Epoch 110/120 | Train Loss: 0.1402 (acc. 93.95\%) | Val Loss: 0.3808 (acc.
+86.33\%) | Time: 34s
+Epoch 111/120 | Train Loss: 0.1420 (acc. 93.65\%) | Val Loss: 0.4025 (acc.
+85.33\%) | Time: 34s
+Epoch 112/120 | Train Loss: 0.1481 (acc. 94.80\%) | Val Loss: 0.4009 (acc.
+84.50\%) | Time: 34s
+Epoch 113/120 | Train Loss: 0.1451 (acc. 94.60\%) | Val Loss: 0.3759 (acc.
+85.83\%) | Time: 34s
+Epoch 114/120 | Train Loss: 0.1347 (acc. 94.50\%) | Val Loss: 0.3902 (acc.
+86.50\%) | Time: 34s
+Epoch 115/120 | Train Loss: 0.1350 (acc. 95.25\%) | Val Loss: 0.3958 (acc.
+85.83\%) | Time: 34s
+Epoch 116/120 | Train Loss: 0.1492 (acc. 93.60\%) | Val Loss: 0.4291 (acc.
+85.17\%) | Time: 34s
+Epoch 117/120 | Train Loss: 0.1390 (acc. 94.25\%) | Val Loss: 0.3823 (acc.
+86.33\%) | Time: 35s
+Epoch 118/120 | Train Loss: 0.1388 (acc. 94.50\%) | Val Loss: 0.4105 (acc.
+85.83\%) | Time: 34s
+Epoch 119/120 | Train Loss: 0.1387 (acc. 94.65\%) | Val Loss: 0.3825 (acc.
+86.17\%) | Time: 34s
+Epoch 120/120 | Train Loss: 0.1183 (acc. 94.95\%) | Val Loss: 0.3888 (acc.
+86.50\%) | Time: 34s
+Training Time: 4112s
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_44_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_44_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsubsection{Adding one more convolutional
+layer}\label{adding-one-more-convolutional-layer}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{net\PYZus{}config2} \PY{o}{=} \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}net\PYZus{}config}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}layers}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{64}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{256}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{512}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{512}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{]}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fc\PYZus{}layers}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{512}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dropout\PYZus{}rate}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mf}{0.4}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{256}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dropout\PYZus{}rate}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mf}{0.2}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{]}\PY{p}{,}
+\PY{p}{\PYZcb{}}
+
+\PY{n}{configs2} \PY{o}{=} \PY{p}{[}
+    \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}config}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{label}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{reg\PYZus{}3}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{net\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{net\PYZus{}config2}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}config}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{label}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{reg\PYZus{}4}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{net\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{net\PYZus{}config2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{train\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{train\PYZus{}config1}\PY{p}{\PYZcb{}}
+\PY{p}{]}
+
+\PY{n}{results} \PY{o}{=} \PY{n}{result\PYZus{}handler}\PY{p}{(}\PY{n}{configs2}\PY{p}{,} \PY{n}{device}\PY{p}{)}
+\PY{n}{plot\PYZus{}scores}\PY{p}{(}\PY{n}{results}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Experiment: reg\_3
+Epoch 1/120 | Train Loss: 0.7206 (acc. 55.15\%) | Val Loss: 0.7543 (acc. 56.83\%)
+| Time: 67s
+Epoch 2/120 | Train Loss: 0.6802 (acc. 57.90\%) | Val Loss: 0.7889 (acc. 58.50\%)
+| Time: 67s
+Epoch 3/120 | Train Loss: 0.6636 (acc. 60.65\%) | Val Loss: 0.6234 (acc. 63.00\%)
+| Time: 67s
+Epoch 4/120 | Train Loss: 0.6367 (acc. 63.45\%) | Val Loss: 0.5956 (acc. 68.83\%)
+| Time: 67s
+Epoch 5/120 | Train Loss: 0.6149 (acc. 66.10\%) | Val Loss: 0.6728 (acc. 61.50\%)
+| Time: 67s
+Epoch 6/120 | Train Loss: 0.6022 (acc. 66.60\%) | Val Loss: 0.6197 (acc. 65.00\%)
+| Time: 67s
+Epoch 7/120 | Train Loss: 0.5728 (acc. 70.70\%) | Val Loss: 0.5960 (acc. 68.67\%)
+| Time: 67s
+Epoch 8/120 | Train Loss: 0.5657 (acc. 71.15\%) | Val Loss: 0.7474 (acc. 61.00\%)
+| Time: 67s
+Epoch 9/120 | Train Loss: 0.5561 (acc. 71.15\%) | Val Loss: 0.5889 (acc. 70.33\%)
+| Time: 67s
+Epoch 10/120 | Train Loss: 0.5503 (acc. 72.65\%) | Val Loss: 0.5609 (acc. 71.17\%)
+| Time: 67s
+Epoch 11/120 | Train Loss: 0.5269 (acc. 72.90\%) | Val Loss: 0.5995 (acc. 64.33\%)
+| Time: 67s
+Epoch 12/120 | Train Loss: 0.5106 (acc. 74.65\%) | Val Loss: 0.5758 (acc. 72.50\%)
+| Time: 67s
+Epoch 13/120 | Train Loss: 0.5094 (acc. 75.35\%) | Val Loss: 0.5395 (acc. 74.83\%)
+| Time: 67s
+Epoch 14/120 | Train Loss: 0.4990 (acc. 75.45\%) | Val Loss: 0.5470 (acc. 74.00\%)
+| Time: 67s
+Epoch 15/120 | Train Loss: 0.4923 (acc. 76.70\%) | Val Loss: 0.6012 (acc. 68.67\%)
+| Time: 67s
+Epoch 16/120 | Train Loss: 0.4936 (acc. 76.90\%) | Val Loss: 0.4990 (acc. 74.83\%)
+| Time: 67s
+Epoch 17/120 | Train Loss: 0.4631 (acc. 79.30\%) | Val Loss: 0.5559 (acc. 72.17\%)
+| Time: 67s
+Epoch 18/120 | Train Loss: 0.4567 (acc. 78.95\%) | Val Loss: 0.5044 (acc. 73.50\%)
+| Time: 67s
+Epoch 19/120 | Train Loss: 0.4417 (acc. 78.95\%) | Val Loss: 0.5147 (acc. 75.83\%)
+| Time: 67s
+Epoch 20/120 | Train Loss: 0.4621 (acc. 78.85\%) | Val Loss: 0.4939 (acc. 78.17\%)
+| Time: 67s
+Epoch 21/120 | Train Loss: 0.4443 (acc. 79.30\%) | Val Loss: 0.5131 (acc. 75.17\%)
+| Time: 67s
+Epoch 22/120 | Train Loss: 0.4118 (acc. 80.95\%) | Val Loss: 0.6186 (acc. 73.50\%)
+| Time: 67s
+Epoch 23/120 | Train Loss: 0.4778 (acc. 76.40\%) | Val Loss: 0.4806 (acc. 78.00\%)
+| Time: 67s
+Epoch 24/120 | Train Loss: 0.4142 (acc. 80.80\%) | Val Loss: 0.4869 (acc. 77.17\%)
+| Time: 67s
+Epoch 25/120 | Train Loss: 0.4148 (acc. 80.40\%) | Val Loss: 0.4357 (acc. 78.00\%)
+| Time: 67s
+Epoch 26/120 | Train Loss: 0.4125 (acc. 81.50\%) | Val Loss: 0.4279 (acc. 81.17\%)
+| Time: 67s
+Epoch 27/120 | Train Loss: 0.3962 (acc. 81.20\%) | Val Loss: 0.4663 (acc. 79.33\%)
+| Time: 67s
+Epoch 28/120 | Train Loss: 0.3772 (acc. 84.10\%) | Val Loss: 0.4881 (acc. 78.50\%)
+| Time: 67s
+Epoch 29/120 | Train Loss: 0.3432 (acc. 84.60\%) | Val Loss: 0.4451 (acc. 81.00\%)
+| Time: 67s
+Epoch 30/120 | Train Loss: 0.3646 (acc. 83.65\%) | Val Loss: 0.4301 (acc. 81.17\%)
+| Time: 67s
+Epoch 31/120 | Train Loss: 0.3487 (acc. 84.25\%) | Val Loss: 0.5731 (acc. 76.00\%)
+| Time: 67s
+Epoch 32/120 | Train Loss: 0.3363 (acc. 84.75\%) | Val Loss: 0.5071 (acc. 76.17\%)
+| Time: 67s
+Epoch 33/120 | Train Loss: 0.3626 (acc. 83.65\%) | Val Loss: 0.3897 (acc. 82.50\%)
+| Time: 67s
+Epoch 34/120 | Train Loss: 0.3289 (acc. 85.75\%) | Val Loss: 0.3771 (acc. 86.00\%)
+| Time: 67s
+Epoch 35/120 | Train Loss: 0.3029 (acc. 87.25\%) | Val Loss: 0.4087 (acc. 84.00\%)
+| Time: 67s
+Epoch 36/120 | Train Loss: 0.3089 (acc. 86.50\%) | Val Loss: 0.3707 (acc. 84.00\%)
+| Time: 67s
+Epoch 37/120 | Train Loss: 0.3221 (acc. 86.55\%) | Val Loss: 0.4977 (acc. 80.00\%)
+| Time: 67s
+Epoch 38/120 | Train Loss: 0.2892 (acc. 87.15\%) | Val Loss: 0.3727 (acc. 85.17\%)
+| Time: 67s
+Epoch 39/120 | Train Loss: 0.2993 (acc. 87.10\%) | Val Loss: 0.4675 (acc. 81.17\%)
+| Time: 67s
+Epoch 40/120 | Train Loss: 0.3062 (acc. 86.55\%) | Val Loss: 0.3523 (acc. 84.83\%)
+| Time: 67s
+Epoch 41/120 | Train Loss: 0.2927 (acc. 87.40\%) | Val Loss: 0.3551 (acc. 83.83\%)
+| Time: 67s
+Epoch 42/120 | Train Loss: 0.2845 (acc. 87.90\%) | Val Loss: 0.3976 (acc. 83.50\%)
+| Time: 67s
+Epoch 43/120 | Train Loss: 0.2866 (acc. 88.35\%) | Val Loss: 0.6133 (acc. 78.50\%)
+| Time: 67s
+Epoch 44/120 | Train Loss: 0.2843 (acc. 88.35\%) | Val Loss: 0.3339 (acc. 85.50\%)
+| Time: 67s
+Epoch 45/120 | Train Loss: 0.2659 (acc. 89.25\%) | Val Loss: 0.3488 (acc. 84.67\%)
+| Time: 67s
+Epoch 46/120 | Train Loss: 0.2761 (acc. 88.70\%) | Val Loss: 0.3933 (acc. 86.33\%)
+| Time: 67s
+Epoch 47/120 | Train Loss: 0.2852 (acc. 87.85\%) | Val Loss: 0.3365 (acc. 84.83\%)
+| Time: 67s
+Epoch 48/120 | Train Loss: 0.2639 (acc. 88.00\%) | Val Loss: 0.3755 (acc. 84.00\%)
+| Time: 67s
+Epoch 49/120 | Train Loss: 0.2497 (acc. 89.95\%) | Val Loss: 0.7493 (acc. 73.17\%)
+| Time: 67s
+Epoch 50/120 | Train Loss: 0.2600 (acc. 89.60\%) | Val Loss: 0.2911 (acc. 88.33\%)
+| Time: 67s
+Epoch 51/120 | Train Loss: 0.2528 (acc. 89.40\%) | Val Loss: 0.3326 (acc. 86.00\%)
+| Time: 67s
+Epoch 52/120 | Train Loss: 0.2187 (acc. 90.60\%) | Val Loss: 0.4604 (acc. 82.83\%)
+| Time: 67s
+Epoch 53/120 | Train Loss: 0.2296 (acc. 90.75\%) | Val Loss: 0.3377 (acc. 86.00\%)
+| Time: 67s
+Epoch 54/120 | Train Loss: 0.2347 (acc. 90.05\%) | Val Loss: 0.4674 (acc. 82.50\%)
+| Time: 67s
+Epoch 55/120 | Train Loss: 0.2162 (acc. 90.70\%) | Val Loss: 0.3766 (acc. 85.00\%)
+| Time: 67s
+Epoch 56/120 | Train Loss: 0.1940 (acc. 92.00\%) | Val Loss: 0.3656 (acc. 86.33\%)
+| Time: 67s
+Epoch 57/120 | Train Loss: 0.1849 (acc. 92.70\%) | Val Loss: 0.3781 (acc. 85.67\%)
+| Time: 67s
+Epoch 58/120 | Train Loss: 0.2236 (acc. 90.80\%) | Val Loss: 0.7648 (acc. 75.83\%)
+| Time: 67s
+Epoch 59/120 | Train Loss: 0.1955 (acc. 91.55\%) | Val Loss: 0.4405 (acc. 84.00\%)
+| Time: 67s
+Epoch 60/120 | Train Loss: 0.2079 (acc. 91.60\%) | Val Loss: 0.3520 (acc. 87.00\%)
+| Time: 67s
+Epoch 61/120 | Train Loss: 0.2027 (acc. 91.70\%) | Val Loss: 0.3833 (acc. 86.17\%)
+| Time: 67s
+Epoch 62/120 | Train Loss: 0.2129 (acc. 90.40\%) | Val Loss: 0.3591 (acc. 86.00\%)
+| Time: 67s
+Epoch 63/120 | Train Loss: 0.1757 (acc. 92.80\%) | Val Loss: 0.3098 (acc. 88.33\%)
+| Time: 67s
+Epoch 64/120 | Train Loss: 0.1723 (acc. 92.95\%) | Val Loss: 0.3120 (acc. 87.50\%)
+| Time: 67s
+Epoch 65/120 | Train Loss: 0.1906 (acc. 92.45\%) | Val Loss: 0.3507 (acc. 86.83\%)
+| Time: 67s
+Epoch 66/120 | Train Loss: 0.1713 (acc. 92.95\%) | Val Loss: 0.3310 (acc. 87.17\%)
+| Time: 67s
+Epoch 67/120 | Train Loss: 0.1631 (acc. 93.30\%) | Val Loss: 0.2971 (acc. 89.00\%)
+| Time: 67s
+Epoch 68/120 | Train Loss: 0.1673 (acc. 93.75\%) | Val Loss: 0.3352 (acc. 88.67\%)
+| Time: 67s
+Epoch 69/120 | Train Loss: 0.1557 (acc. 93.70\%) | Val Loss: 0.4033 (acc. 87.17\%)
+| Time: 67s
+Epoch 70/120 | Train Loss: 0.1711 (acc. 93.10\%) | Val Loss: 0.3080 (acc. 89.67\%)
+| Time: 67s
+Epoch 71/120 | Train Loss: 0.1537 (acc. 93.90\%) | Val Loss: 0.3449 (acc. 86.83\%)
+| Time: 67s
+Epoch 72/120 | Train Loss: 0.1642 (acc. 93.20\%) | Val Loss: 0.3177 (acc. 88.00\%)
+| Time: 67s
+Epoch 73/120 | Train Loss: 0.1374 (acc. 94.15\%) | Val Loss: 0.2684 (acc. 88.83\%)
+| Time: 67s
+Epoch 74/120 | Train Loss: 0.1266 (acc. 95.05\%) | Val Loss: 0.2855 (acc. 88.83\%)
+| Time: 67s
+Epoch 75/120 | Train Loss: 0.1609 (acc. 93.70\%) | Val Loss: 0.3289 (acc. 89.33\%)
+| Time: 67s
+Epoch 76/120 | Train Loss: 0.1678 (acc. 92.65\%) | Val Loss: 0.2932 (acc. 88.17\%)
+| Time: 67s
+Epoch 77/120 | Train Loss: 0.1437 (acc. 94.80\%) | Val Loss: 0.4449 (acc. 85.17\%)
+| Time: 67s
+Epoch 78/120 | Train Loss: 0.1824 (acc. 92.70\%) | Val Loss: 0.3284 (acc. 87.00\%)
+| Time: 67s
+Epoch 79/120 | Train Loss: 0.1366 (acc. 94.65\%) | Val Loss: 0.3170 (acc. 87.33\%)
+| Time: 67s
+Epoch 80/120 | Train Loss: 0.1377 (acc. 94.35\%) | Val Loss: 0.3692 (acc. 87.50\%)
+| Time: 67s
+Epoch 81/120 | Train Loss: 0.1326 (acc. 95.30\%) | Val Loss: 0.2757 (acc. 87.67\%)
+| Time: 67s
+Epoch 82/120 | Train Loss: 0.1139 (acc. 95.55\%) | Val Loss: 0.3848 (acc. 87.17\%)
+| Time: 68s
+Epoch 83/120 | Train Loss: 0.1520 (acc. 93.85\%) | Val Loss: 0.3718 (acc. 86.00\%)
+| Time: 67s
+Epoch 84/120 | Train Loss: 0.1272 (acc. 95.35\%) | Val Loss: 0.3369 (acc. 87.00\%)
+| Time: 67s
+Epoch 85/120 | Train Loss: 0.1166 (acc. 95.50\%) | Val Loss: 0.2958 (acc. 89.67\%)
+| Time: 67s
+Epoch 86/120 | Train Loss: 0.1233 (acc. 95.45\%) | Val Loss: 0.3126 (acc. 88.50\%)
+| Time: 67s
+Epoch 87/120 | Train Loss: 0.1655 (acc. 94.05\%) | Val Loss: 0.3738 (acc. 87.67\%)
+| Time: 67s
+Epoch 88/120 | Train Loss: 0.1296 (acc. 94.65\%) | Val Loss: 0.2697 (acc. 90.00\%)
+| Time: 67s
+Epoch 89/120 | Train Loss: 0.1159 (acc. 95.75\%) | Val Loss: 0.5481 (acc. 85.00\%)
+| Time: 67s
+Epoch 90/120 | Train Loss: 0.1388 (acc. 94.20\%) | Val Loss: 0.4467 (acc. 87.17\%)
+| Time: 67s
+Epoch 91/120 | Train Loss: 0.1342 (acc. 94.90\%) | Val Loss: 0.2801 (acc. 90.83\%)
+| Time: 67s
+Epoch 92/120 | Train Loss: 0.1434 (acc. 94.15\%) | Val Loss: 0.3517 (acc. 88.50\%)
+| Time: 67s
+Epoch 93/120 | Train Loss: 0.1240 (acc. 95.05\%) | Val Loss: 0.2855 (acc. 89.83\%)
+| Time: 67s
+Epoch 94/120 | Train Loss: 0.0916 (acc. 96.35\%) | Val Loss: 0.3218 (acc. 90.33\%)
+| Time: 67s
+Epoch 95/120 | Train Loss: 0.0975 (acc. 96.00\%) | Val Loss: 0.5325 (acc. 85.17\%)
+| Time: 67s
+Epoch 96/120 | Train Loss: 0.1017 (acc. 96.30\%) | Val Loss: 0.3723 (acc. 88.00\%)
+| Time: 67s
+Epoch 97/120 | Train Loss: 0.1237 (acc. 94.30\%) | Val Loss: 0.2634 (acc. 91.00\%)
+| Time: 67s
+Epoch 98/120 | Train Loss: 0.1012 (acc. 95.90\%) | Val Loss: 0.3041 (acc. 90.33\%)
+| Time: 67s
+Epoch 99/120 | Train Loss: 0.1016 (acc. 96.25\%) | Val Loss: 0.3535 (acc. 88.33\%)
+| Time: 67s
+Epoch 100/120 | Train Loss: 0.0990 (acc. 95.95\%) | Val Loss: 0.2743 (acc.
+91.17\%) | Time: 67s
+Epoch 101/120 | Train Loss: 0.1105 (acc. 95.70\%) | Val Loss: 0.2681 (acc.
+90.33\%) | Time: 67s
+Epoch 102/120 | Train Loss: 0.1064 (acc. 96.00\%) | Val Loss: 0.4660 (acc.
+88.00\%) | Time: 67s
+Epoch 103/120 | Train Loss: 0.1173 (acc. 95.05\%) | Val Loss: 0.2934 (acc.
+89.83\%) | Time: 67s
+Epoch 104/120 | Train Loss: 0.1039 (acc. 95.80\%) | Val Loss: 0.2386 (acc.
+91.50\%) | Time: 67s
+Epoch 105/120 | Train Loss: 0.1126 (acc. 96.50\%) | Val Loss: 0.3063 (acc.
+90.83\%) | Time: 67s
+Epoch 106/120 | Train Loss: 0.1080 (acc. 96.30\%) | Val Loss: 0.3350 (acc.
+89.67\%) | Time: 67s
+Epoch 107/120 | Train Loss: 0.0932 (acc. 96.20\%) | Val Loss: 0.2827 (acc.
+90.33\%) | Time: 67s
+Epoch 108/120 | Train Loss: 0.0998 (acc. 96.50\%) | Val Loss: 0.3170 (acc.
+89.67\%) | Time: 67s
+Epoch 109/120 | Train Loss: 0.1282 (acc. 95.30\%) | Val Loss: 0.3020 (acc.
+89.50\%) | Time: 67s
+Epoch 110/120 | Train Loss: 0.0889 (acc. 96.60\%) | Val Loss: 0.4448 (acc.
+85.83\%) | Time: 67s
+Epoch 111/120 | Train Loss: 0.0856 (acc. 96.65\%) | Val Loss: 0.2558 (acc.
+90.00\%) | Time: 67s
+Epoch 112/120 | Train Loss: 0.0883 (acc. 96.85\%) | Val Loss: 0.2908 (acc.
+90.17\%) | Time: 67s
+Epoch 113/120 | Train Loss: 0.0900 (acc. 96.55\%) | Val Loss: 0.2865 (acc.
+90.67\%) | Time: 67s
+Epoch 114/120 | Train Loss: 0.0760 (acc. 97.10\%) | Val Loss: 0.2750 (acc.
+91.33\%) | Time: 67s
+Epoch 115/120 | Train Loss: 0.0827 (acc. 96.75\%) | Val Loss: 0.2618 (acc.
+92.17\%) | Time: 67s
+Epoch 116/120 | Train Loss: 0.1015 (acc. 96.25\%) | Val Loss: 0.2775 (acc.
+90.33\%) | Time: 67s
+Epoch 117/120 | Train Loss: 0.0798 (acc. 96.95\%) | Val Loss: 0.3634 (acc.
+88.17\%) | Time: 67s
+Epoch 118/120 | Train Loss: 0.0842 (acc. 96.95\%) | Val Loss: 0.2854 (acc.
+90.67\%) | Time: 67s
+Epoch 119/120 | Train Loss: 0.0669 (acc. 97.25\%) | Val Loss: 0.2490 (acc.
+91.83\%) | Time: 67s
+Epoch 120/120 | Train Loss: 0.0740 (acc. 97.15\%) | Val Loss: 0.3117 (acc.
+91.67\%) | Time: 67s
+Training Time: 8018s
+
+Experiment: reg\_4
+Epoch 1/120 | Train Loss: 0.7047 (acc. 55.85\%) | Val Loss: 0.6922 (acc. 62.00\%)
+| Time: 67s
+Epoch 2/120 | Train Loss: 0.6393 (acc. 63.35\%) | Val Loss: 0.6482 (acc. 59.83\%)
+| Time: 67s
+Epoch 3/120 | Train Loss: 0.6206 (acc. 66.35\%) | Val Loss: 0.6200 (acc. 64.17\%)
+| Time: 67s
+Epoch 4/120 | Train Loss: 0.5876 (acc. 68.50\%) | Val Loss: 0.6980 (acc. 62.17\%)
+| Time: 67s
+Epoch 5/120 | Train Loss: 0.5801 (acc. 69.85\%) | Val Loss: 0.6019 (acc. 66.17\%)
+| Time: 67s
+Epoch 6/120 | Train Loss: 0.5693 (acc. 68.80\%) | Val Loss: 0.5931 (acc. 68.17\%)
+| Time: 67s
+Epoch 7/120 | Train Loss: 0.5562 (acc. 72.05\%) | Val Loss: 0.5676 (acc. 69.17\%)
+| Time: 67s
+Epoch 8/120 | Train Loss: 0.5508 (acc. 73.50\%) | Val Loss: 0.6502 (acc. 65.50\%)
+| Time: 67s
+Epoch 9/120 | Train Loss: 0.5197 (acc. 73.90\%) | Val Loss: 0.5756 (acc. 72.00\%)
+| Time: 67s
+Epoch 10/120 | Train Loss: 0.5229 (acc. 74.70\%) | Val Loss: 0.6711 (acc. 62.50\%)
+| Time: 67s
+Epoch 11/120 | Train Loss: 0.5215 (acc. 75.45\%) | Val Loss: 0.5439 (acc. 74.50\%)
+| Time: 67s
+Epoch 12/120 | Train Loss: 0.4906 (acc. 76.55\%) | Val Loss: 0.5044 (acc. 76.67\%)
+| Time: 67s
+Epoch 13/120 | Train Loss: 0.4835 (acc. 77.25\%) | Val Loss: 0.4873 (acc. 75.83\%)
+| Time: 67s
+Epoch 14/120 | Train Loss: 0.4614 (acc. 79.60\%) | Val Loss: 0.6430 (acc. 69.33\%)
+| Time: 67s
+Epoch 15/120 | Train Loss: 0.4500 (acc. 79.40\%) | Val Loss: 0.6143 (acc. 72.00\%)
+| Time: 67s
+Epoch 16/120 | Train Loss: 0.4687 (acc. 78.00\%) | Val Loss: 0.5107 (acc. 77.00\%)
+| Time: 67s
+Epoch 17/120 | Train Loss: 0.4408 (acc. 79.45\%) | Val Loss: 0.5049 (acc. 75.50\%)
+| Time: 67s
+Epoch 18/120 | Train Loss: 0.4183 (acc. 81.80\%) | Val Loss: 0.4865 (acc. 76.50\%)
+| Time: 67s
+Epoch 19/120 | Train Loss: 0.4158 (acc. 81.90\%) | Val Loss: 0.4882 (acc. 78.50\%)
+| Time: 67s
+Epoch 20/120 | Train Loss: 0.3973 (acc. 81.45\%) | Val Loss: 0.5123 (acc. 77.67\%)
+| Time: 67s
+Epoch 21/120 | Train Loss: 0.3712 (acc. 83.45\%) | Val Loss: 0.4798 (acc. 78.33\%)
+| Time: 67s
+Epoch 22/120 | Train Loss: 0.4021 (acc. 83.05\%) | Val Loss: 0.5558 (acc. 74.17\%)
+| Time: 67s
+Epoch 23/120 | Train Loss: 0.3716 (acc. 83.20\%) | Val Loss: 0.4363 (acc. 81.33\%)
+| Time: 67s
+Epoch 24/120 | Train Loss: 0.3868 (acc. 81.95\%) | Val Loss: 0.7918 (acc. 69.50\%)
+| Time: 67s
+Epoch 25/120 | Train Loss: 0.3843 (acc. 82.60\%) | Val Loss: 0.4914 (acc. 79.17\%)
+| Time: 67s
+Epoch 26/120 | Train Loss: 0.3303 (acc. 86.25\%) | Val Loss: 0.3908 (acc. 81.83\%)
+| Time: 67s
+Epoch 27/120 | Train Loss: 0.3031 (acc. 86.35\%) | Val Loss: 0.4620 (acc. 81.67\%)
+| Time: 67s
+Epoch 28/120 | Train Loss: 0.2944 (acc. 87.65\%) | Val Loss: 0.4229 (acc. 80.83\%)
+| Time: 67s
+Epoch 29/120 | Train Loss: 0.3225 (acc. 85.80\%) | Val Loss: 0.3870 (acc. 83.83\%)
+| Time: 67s
+Epoch 30/120 | Train Loss: 0.3118 (acc. 87.05\%) | Val Loss: 0.3783 (acc. 83.17\%)
+| Time: 67s
+Epoch 31/120 | Train Loss: 0.2989 (acc. 86.45\%) | Val Loss: 0.3883 (acc. 84.67\%)
+| Time: 67s
+Epoch 32/120 | Train Loss: 0.2765 (acc. 88.50\%) | Val Loss: 0.3599 (acc. 85.33\%)
+| Time: 67s
+Epoch 33/120 | Train Loss: 0.2972 (acc. 87.10\%) | Val Loss: 0.3706 (acc. 84.83\%)
+| Time: 67s
+Epoch 34/120 | Train Loss: 0.2757 (acc. 89.10\%) | Val Loss: 0.3927 (acc. 83.50\%)
+| Time: 68s
+Epoch 35/120 | Train Loss: 0.2514 (acc. 90.20\%) | Val Loss: 0.3298 (acc. 86.00\%)
+| Time: 68s
+Epoch 36/120 | Train Loss: 0.2860 (acc. 87.55\%) | Val Loss: 0.3622 (acc. 85.00\%)
+| Time: 67s
+Epoch 37/120 | Train Loss: 0.2438 (acc. 89.35\%) | Val Loss: 0.3580 (acc. 85.50\%)
+| Time: 67s
+Epoch 38/120 | Train Loss: 0.2286 (acc. 90.60\%) | Val Loss: 0.3856 (acc. 84.00\%)
+| Time: 67s
+Epoch 39/120 | Train Loss: 0.2383 (acc. 90.10\%) | Val Loss: 0.3534 (acc. 85.33\%)
+| Time: 67s
+Epoch 40/120 | Train Loss: 0.2089 (acc. 91.50\%) | Val Loss: 0.3663 (acc. 85.00\%)
+| Time: 68s
+Epoch 41/120 | Train Loss: 0.2168 (acc. 91.05\%) | Val Loss: 0.3586 (acc. 84.17\%)
+| Time: 67s
+Epoch 42/120 | Train Loss: 0.2216 (acc. 90.95\%) | Val Loss: 0.4370 (acc. 84.33\%)
+| Time: 70s
+Epoch 43/120 | Train Loss: 0.2208 (acc. 90.60\%) | Val Loss: 0.3776 (acc. 85.50\%)
+| Time: 67s
+Epoch 44/120 | Train Loss: 0.2285 (acc. 90.15\%) | Val Loss: 0.3789 (acc. 84.67\%)
+| Time: 67s
+Epoch 45/120 | Train Loss: 0.2159 (acc. 90.85\%) | Val Loss: 0.4297 (acc. 86.50\%)
+| Time: 67s
+Epoch 46/120 | Train Loss: 0.2089 (acc. 91.30\%) | Val Loss: 0.3336 (acc. 86.67\%)
+| Time: 67s
+Epoch 47/120 | Train Loss: 0.1955 (acc. 92.10\%) | Val Loss: 0.5513 (acc. 81.50\%)
+| Time: 67s
+Epoch 48/120 | Train Loss: 0.2087 (acc. 91.45\%) | Val Loss: 0.3444 (acc. 86.33\%)
+| Time: 67s
+Epoch 49/120 | Train Loss: 0.2035 (acc. 91.45\%) | Val Loss: 0.4692 (acc. 85.33\%)
+| Time: 67s
+Epoch 50/120 | Train Loss: 0.1823 (acc. 91.95\%) | Val Loss: 0.3462 (acc. 87.33\%)
+| Time: 67s
+Epoch 51/120 | Train Loss: 0.1732 (acc. 93.45\%) | Val Loss: 0.3008 (acc. 89.00\%)
+| Time: 67s
+Epoch 52/120 | Train Loss: 0.1742 (acc. 92.75\%) | Val Loss: 0.3278 (acc. 87.33\%)
+| Time: 67s
+Epoch 53/120 | Train Loss: 0.1615 (acc. 93.55\%) | Val Loss: 0.3221 (acc. 88.00\%)
+| Time: 67s
+Epoch 54/120 | Train Loss: 0.1429 (acc. 94.00\%) | Val Loss: 0.3693 (acc. 87.00\%)
+| Time: 67s
+Epoch 55/120 | Train Loss: 0.1290 (acc. 94.85\%) | Val Loss: 0.4544 (acc. 86.17\%)
+| Time: 67s
+Epoch 56/120 | Train Loss: 0.1425 (acc. 94.20\%) | Val Loss: 0.3564 (acc. 87.17\%)
+| Time: 67s
+Epoch 57/120 | Train Loss: 0.1544 (acc. 93.95\%) | Val Loss: 0.3282 (acc. 88.33\%)
+| Time: 67s
+Epoch 58/120 | Train Loss: 0.1483 (acc. 94.25\%) | Val Loss: 0.3485 (acc. 87.33\%)
+| Time: 67s
+Epoch 59/120 | Train Loss: 0.1574 (acc. 93.95\%) | Val Loss: 0.3070 (acc. 89.50\%)
+| Time: 67s
+Epoch 60/120 | Train Loss: 0.1253 (acc. 95.10\%) | Val Loss: 0.3293 (acc. 88.17\%)
+| Time: 67s
+Epoch 61/120 | Train Loss: 0.1670 (acc. 94.75\%) | Val Loss: 0.4046 (acc. 87.50\%)
+| Time: 67s
+Epoch 62/120 | Train Loss: 0.1581 (acc. 93.65\%) | Val Loss: 0.4881 (acc. 84.83\%)
+| Time: 67s
+Epoch 63/120 | Train Loss: 0.1563 (acc. 93.85\%) | Val Loss: 0.3700 (acc. 87.50\%)
+| Time: 67s
+Epoch 64/120 | Train Loss: 0.1228 (acc. 95.65\%) | Val Loss: 0.3689 (acc. 87.33\%)
+| Time: 67s
+Epoch 65/120 | Train Loss: 0.1254 (acc. 95.05\%) | Val Loss: 0.3460 (acc. 88.83\%)
+| Time: 67s
+Epoch 66/120 | Train Loss: 0.1189 (acc. 95.20\%) | Val Loss: 0.3387 (acc. 89.50\%)
+| Time: 67s
+Epoch 67/120 | Train Loss: 0.1289 (acc. 95.00\%) | Val Loss: 0.3249 (acc. 91.00\%)
+| Time: 67s
+Epoch 68/120 | Train Loss: 0.1008 (acc. 96.10\%) | Val Loss: 0.3334 (acc. 88.83\%)
+| Time: 67s
+Epoch 69/120 | Train Loss: 0.0984 (acc. 96.20\%) | Val Loss: 0.3412 (acc. 89.50\%)
+| Time: 67s
+Epoch 70/120 | Train Loss: 0.1160 (acc. 95.95\%) | Val Loss: 0.3617 (acc. 89.17\%)
+| Time: 67s
+Epoch 71/120 | Train Loss: 0.1178 (acc. 95.65\%) | Val Loss: 0.3561 (acc. 88.67\%)
+| Time: 67s
+Epoch 72/120 | Train Loss: 0.1307 (acc. 94.50\%) | Val Loss: 0.3677 (acc. 87.83\%)
+| Time: 67s
+Epoch 73/120 | Train Loss: 0.1076 (acc. 95.65\%) | Val Loss: 0.3262 (acc. 88.83\%)
+| Time: 67s
+Epoch 74/120 | Train Loss: 0.1048 (acc. 96.10\%) | Val Loss: 0.3870 (acc. 86.33\%)
+| Time: 67s
+Epoch 75/120 | Train Loss: 0.1219 (acc. 95.70\%) | Val Loss: 0.4031 (acc. 86.17\%)
+| Time: 67s
+Epoch 76/120 | Train Loss: 0.0832 (acc. 97.15\%) | Val Loss: 0.3331 (acc. 89.33\%)
+| Time: 67s
+Epoch 77/120 | Train Loss: 0.0879 (acc. 96.85\%) | Val Loss: 0.3198 (acc. 89.50\%)
+| Time: 67s
+Epoch 78/120 | Train Loss: 0.1347 (acc. 96.40\%) | Val Loss: 0.3182 (acc. 90.00\%)
+| Time: 67s
+Epoch 79/120 | Train Loss: 0.0964 (acc. 96.50\%) | Val Loss: 0.3149 (acc. 89.50\%)
+| Time: 67s
+Epoch 80/120 | Train Loss: 0.0950 (acc. 96.25\%) | Val Loss: 0.3244 (acc. 89.33\%)
+| Time: 67s
+Epoch 81/120 | Train Loss: 0.0960 (acc. 96.45\%) | Val Loss: 0.3273 (acc. 89.67\%)
+| Time: 67s
+Epoch 82/120 | Train Loss: 0.0992 (acc. 96.45\%) | Val Loss: 0.3052 (acc. 89.50\%)
+| Time: 67s
+Epoch 83/120 | Train Loss: 0.0868 (acc. 97.05\%) | Val Loss: 0.3015 (acc. 89.00\%)
+| Time: 67s
+Epoch 84/120 | Train Loss: 0.0902 (acc. 96.65\%) | Val Loss: 0.2983 (acc. 90.00\%)
+| Time: 67s
+Epoch 85/120 | Train Loss: 0.0824 (acc. 96.75\%) | Val Loss: 0.3060 (acc. 90.00\%)
+| Time: 67s
+Epoch 86/120 | Train Loss: 0.0683 (acc. 97.70\%) | Val Loss: 0.3179 (acc. 88.17\%)
+| Time: 67s
+Epoch 87/120 | Train Loss: 0.0651 (acc. 97.65\%) | Val Loss: 0.3229 (acc. 89.17\%)
+| Time: 67s
+Epoch 88/120 | Train Loss: 0.0832 (acc. 96.70\%) | Val Loss: 0.3387 (acc. 88.33\%)
+| Time: 67s
+Epoch 89/120 | Train Loss: 0.0677 (acc. 97.15\%) | Val Loss: 0.3406 (acc. 89.17\%)
+| Time: 67s
+Epoch 90/120 | Train Loss: 0.0668 (acc. 97.25\%) | Val Loss: 0.3052 (acc. 89.67\%)
+| Time: 67s
+Epoch 91/120 | Train Loss: 0.0771 (acc. 97.55\%) | Val Loss: 0.3154 (acc. 89.83\%)
+| Time: 67s
+Epoch 92/120 | Train Loss: 0.0714 (acc. 97.60\%) | Val Loss: 0.3325 (acc. 88.83\%)
+| Time: 67s
+Epoch 93/120 | Train Loss: 0.0774 (acc. 97.05\%) | Val Loss: 0.3195 (acc. 89.17\%)
+| Time: 67s
+Epoch 94/120 | Train Loss: 0.0665 (acc. 97.60\%) | Val Loss: 0.3369 (acc. 89.33\%)
+| Time: 67s
+Epoch 95/120 | Train Loss: 0.0829 (acc. 96.95\%) | Val Loss: 0.3272 (acc. 89.33\%)
+| Time: 67s
+Epoch 96/120 | Train Loss: 0.0704 (acc. 97.35\%) | Val Loss: 0.3520 (acc. 88.83\%)
+| Time: 67s
+Epoch 97/120 | Train Loss: 0.0814 (acc. 96.75\%) | Val Loss: 0.3474 (acc. 90.00\%)
+| Time: 67s
+Epoch 98/120 | Train Loss: 0.0725 (acc. 97.10\%) | Val Loss: 0.3524 (acc. 88.67\%)
+| Time: 67s
+Epoch 99/120 | Train Loss: 0.0598 (acc. 97.70\%) | Val Loss: 0.3396 (acc. 89.50\%)
+| Time: 67s
+Epoch 100/120 | Train Loss: 0.0665 (acc. 97.20\%) | Val Loss: 0.3376 (acc.
+90.17\%) | Time: 67s
+Epoch 101/120 | Train Loss: 0.0456 (acc. 98.50\%) | Val Loss: 0.3500 (acc.
+89.00\%) | Time: 67s
+Epoch 102/120 | Train Loss: 0.0472 (acc. 98.50\%) | Val Loss: 0.3313 (acc.
+90.17\%) | Time: 67s
+Epoch 103/120 | Train Loss: 0.0674 (acc. 97.70\%) | Val Loss: 0.3263 (acc.
+90.17\%) | Time: 67s
+Epoch 104/120 | Train Loss: 0.0554 (acc. 97.95\%) | Val Loss: 0.3132 (acc.
+90.67\%) | Time: 67s
+Epoch 105/120 | Train Loss: 0.0589 (acc. 98.00\%) | Val Loss: 0.3411 (acc.
+90.67\%) | Time: 67s
+Epoch 106/120 | Train Loss: 0.0456 (acc. 98.05\%) | Val Loss: 0.3470 (acc.
+89.83\%) | Time: 67s
+Epoch 107/120 | Train Loss: 0.0433 (acc. 98.30\%) | Val Loss: 0.3356 (acc.
+89.67\%) | Time: 67s
+Epoch 108/120 | Train Loss: 0.0856 (acc. 98.25\%) | Val Loss: 0.3408 (acc.
+90.00\%) | Time: 67s
+Epoch 109/120 | Train Loss: 0.0578 (acc. 97.95\%) | Val Loss: 0.3249 (acc.
+89.50\%) | Time: 68s
+Epoch 110/120 | Train Loss: 0.0625 (acc. 97.45\%) | Val Loss: 0.3357 (acc.
+89.33\%) | Time: 68s
+Epoch 111/120 | Train Loss: 0.0448 (acc. 98.60\%) | Val Loss: 0.3400 (acc.
+89.50\%) | Time: 68s
+Epoch 112/120 | Train Loss: 0.0578 (acc. 97.95\%) | Val Loss: 0.3215 (acc.
+90.83\%) | Time: 67s
+Epoch 113/120 | Train Loss: 0.0525 (acc. 98.15\%) | Val Loss: 0.3348 (acc.
+90.50\%) | Time: 68s
+Epoch 114/120 | Train Loss: 0.0510 (acc. 98.00\%) | Val Loss: 0.3671 (acc.
+89.17\%) | Time: 67s
+Epoch 115/120 | Train Loss: 0.0532 (acc. 97.95\%) | Val Loss: 0.3569 (acc.
+89.33\%) | Time: 68s
+Epoch 116/120 | Train Loss: 0.0564 (acc. 97.85\%) | Val Loss: 0.3501 (acc.
+89.50\%) | Time: 68s
+Epoch 117/120 | Train Loss: 0.0544 (acc. 98.00\%) | Val Loss: 0.3818 (acc.
+89.67\%) | Time: 67s
+Epoch 118/120 | Train Loss: 0.0606 (acc. 97.85\%) | Val Loss: 0.3494 (acc.
+90.17\%) | Time: 67s
+Epoch 119/120 | Train Loss: 0.0563 (acc. 97.65\%) | Val Loss: 0.3548 (acc.
+89.33\%) | Time: 68s
+Epoch 120/120 | Train Loss: 0.0384 (acc. 98.65\%) | Val Loss: 0.3839 (acc.
+88.67\%) | Time: 67s
+Training Time: 8039s
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_46_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_46_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{Predict}\label{predict}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{test\PYZus{}image} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/test/cats/cat.1306.jpg}\PY{l+s+s2}{\PYZdq{}}
+\PY{n}{net\PYZus{}config2} \PY{o}{=} \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}net\PYZus{}config}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}layers}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{64}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{256}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{512}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}channels}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{512}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{kernel\PYZus{}size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{padding}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}pool\PYZus{}stride}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{]}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fc\PYZus{}layers}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{512}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dropout\PYZus{}rate}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mf}{0.4}\PY{p}{\PYZcb{}}\PY{p}{,}
+        \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{out\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{256}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{batch\PYZus{}norm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{k+kc}{True}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dropout\PYZus{}rate}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mf}{0.2}\PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{p}{]}\PY{p}{,}
+\PY{p}{\PYZcb{}}
+\PY{n}{model} \PY{o}{=} \PY{n}{ConvolutionalNetwork}\PY{p}{(}\PY{n}{net\PYZus{}config2}\PY{p}{)}
+\PY{n}{predict}\PY{p}{(}\PY{n}{model}\PY{p}{,} \PY{n}{device}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{models/reg\PYZus{}4.pth}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{results/reg\PYZus{}4.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plot\PYZus{}individual\PYZus{}feature\PYZus{}maps}\PY{p}{(}\PY{n}{model}\PY{p}{,} \PY{n}{device}\PY{p}{,} \PY{n}{test\PYZus{}image}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{results/feature\PYZus{}maps\PYZus{}reg\PYZus{}4.png}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Total Correctly Classified: 366 | Total Misclassified: 34 | Accuracy: 91.5\%
+Class-wise Correctly Classified Counts:
+- Class cat: 175
+- Class dog: 191
+Class-wise Misclassified Counts:
+- Class cat: 25
+- Class dog: 9
+Cat Accuracy: 87.5\% | Dog Accuracy: 95.5\%
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_48_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_48_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_48_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_48_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_48_5.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_48_6.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_48_7.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{Transfer Learning}\label{transfer-learning}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{num\PYZus{}classes} \PY{o}{=} \PY{n}{default\PYZus{}config}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{net\PYZus{}config}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{num\PYZus{}classes}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+
+\PY{n}{model\PYZus{}alexnet} \PY{o}{=} \PY{n}{alexnet}\PY{p}{(}\PY{n}{weights}\PY{o}{=}\PY{n}{AlexNet\PYZus{}Weights}\PY{o}{.}\PY{n}{DEFAULT}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Freeze all parameters/layers except last one}
+\PY{k}{for} \PY{n}{name}\PY{p}{,} \PY{n}{param} \PY{o+ow}{in} \PY{n}{model\PYZus{}alexnet}\PY{o}{.}\PY{n}{named\PYZus{}parameters}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bn}\PY{l+s+s2}{\PYZdq{}} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{name}\PY{p}{)}\PY{p}{:}
+        \PY{n}{param}\PY{o}{.}\PY{n}{requires\PYZus{}grad} \PY{o}{=} \PY{k+kc}{False}
+
+\PY{c+c1}{\PYZsh{} Change last layer to output 2 classes}
+\PY{n}{model\PYZus{}alexnet}\PY{o}{.}\PY{n}{classifier}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{4096}\PY{p}{,} \PY{n}{num\PYZus{}classes}\PY{p}{)}
+
+\PY{n}{config\PYZus{}alexnet} \PY{o}{=} \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{default\PYZus{}config}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{label}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{alexnet}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n\PYZus{}epochs}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+m+mi}{20}\PY{p}{\PYZcb{}}
+
+\PY{n}{results} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{results}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{alexnet}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{train\PYZus{}model}\PY{p}{(}\PY{n}{model\PYZus{}alexnet}\PY{p}{,} \PY{n}{device}\PY{p}{,} \PY{n}{config\PYZus{}alexnet}\PY{p}{)}
+\PY{n}{plot\PYZus{}scores}\PY{p}{(}\PY{n}{results}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Experiment: alexnet
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Epoch 1/20 | Train Loss: 0.3162 (acc. 86.20\%) | Val Loss: 0.1319 (acc. 94.00\%) |
+Time: 43s
+Epoch 2/20 | Train Loss: 0.1956 (acc. 92.10\%) | Val Loss: 0.1380 (acc. 94.67\%) |
+Time: 38s
+Epoch 3/20 | Train Loss: 0.1803 (acc. 92.35\%) | Val Loss: 0.1180 (acc. 95.00\%) |
+Time: 37s
+Epoch 4/20 | Train Loss: 0.1746 (acc. 92.85\%) | Val Loss: 0.1164 (acc. 94.50\%) |
+Time: 38s
+Epoch 5/20 | Train Loss: 0.1548 (acc. 93.55\%) | Val Loss: 0.1260 (acc. 94.83\%) |
+Time: 37s
+Epoch 6/20 | Train Loss: 0.1642 (acc. 93.10\%) | Val Loss: 0.1105 (acc. 95.00\%) |
+Time: 36s
+Epoch 7/20 | Train Loss: 0.1540 (acc. 93.60\%) | Val Loss: 0.1089 (acc. 96.00\%) |
+Time: 36s
+Epoch 8/20 | Train Loss: 0.1409 (acc. 94.40\%) | Val Loss: 0.1133 (acc. 95.17\%) |
+Time: 35s
+Epoch 9/20 | Train Loss: 0.1446 (acc. 94.30\%) | Val Loss: 0.1256 (acc. 95.33\%) |
+Time: 36s
+Epoch 10/20 | Train Loss: 0.1248 (acc. 95.15\%) | Val Loss: 0.1380 (acc. 94.83\%)
+| Time: 35s
+Epoch 11/20 | Train Loss: 0.1448 (acc. 94.50\%) | Val Loss: 0.1210 (acc. 94.83\%)
+| Time: 36s
+Epoch 12/20 | Train Loss: 0.1536 (acc. 94.00\%) | Val Loss: 0.1698 (acc. 93.67\%)
+| Time: 35s
+Epoch 13/20 | Train Loss: 0.1365 (acc. 94.10\%) | Val Loss: 0.1622 (acc. 93.67\%)
+| Time: 35s
+Epoch 14/20 | Train Loss: 0.1229 (acc. 95.20\%) | Val Loss: 0.1379 (acc. 94.67\%)
+| Time: 35s
+Epoch 15/20 | Train Loss: 0.1361 (acc. 94.35\%) | Val Loss: 0.1254 (acc. 95.83\%)
+| Time: 36s
+Epoch 16/20 | Train Loss: 0.1163 (acc. 95.40\%) | Val Loss: 0.1454 (acc. 94.67\%)
+| Time: 36s
+Epoch 17/20 | Train Loss: 0.1351 (acc. 95.30\%) | Val Loss: 0.1353 (acc. 95.17\%)
+| Time: 40s
+Epoch 18/20 | Train Loss: 0.1196 (acc. 95.45\%) | Val Loss: 0.1446 (acc. 94.33\%)
+| Time: 35s
+Epoch 19/20 | Train Loss: 0.1448 (acc. 94.15\%) | Val Loss: 0.1477 (acc. 95.17\%)
+| Time: 33s
+Epoch 20/20 | Train Loss: 0.1400 (acc. 94.40\%) | Val Loss: 0.1953 (acc. 93.50\%)
+| Time: 33s
+Training Time: 724s
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_50_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model} \PY{o}{=} \PY{n}{AlexNet}\PY{p}{(}\PY{n}{num\PYZus{}classes}\PY{o}{=}\PY{n}{num\PYZus{}classes}\PY{p}{)}
+\PY{n}{predict}\PY{p}{(}\PY{n}{model}\PY{p}{,} \PY{n}{device}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{models/alexnet.pth}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{results/alexnet.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plot\PYZus{}individual\PYZus{}feature\PYZus{}maps}\PY{p}{(}\PY{n}{model}\PY{p}{,} \PY{n}{device}\PY{p}{,} \PY{n}{test\PYZus{}image}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{results/feature\PYZus{}maps\PYZus{}alexnet.png}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Total Correctly Classified: 374 | Total Misclassified: 26 | Accuracy: 93.5\%
+Class-wise Correctly Classified Counts:
+- Class cat: 191
+- Class dog: 183
+Class-wise Misclassified Counts:
+- Class cat: 9
+- Class dog: 17
+Cat Accuracy: 95.5\% | Dog Accuracy: 91.5\%
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_51_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_51_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_51_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_51_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_51_5.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_51_6.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{notebook_files/notebook_51_7.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
