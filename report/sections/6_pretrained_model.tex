@@ -2,7 +2,7 @@
 To see how good our model performs compared to a well-known model, we used the pretrained model 'AlexNet'.
 This model is pretrained on the ImageNet dataset, which contains 1.2 million images and 1000 classes, also including cats and dogs.
 However, to use the pretrained model for this binary classification task, the output layer is modified.
-The results of the pretrained model after 20 epochs are shown in Figure \ref{fig:pretrained_model_results}.
+The results of the pretrained model after 20 epochs are shown in Figure \ref{fig:results_alexnet}. The test accuracy is summarized in Table \ref{tab:alexnet}.
 
 \begin{figure}[H]
     \vspace*{-0.7cm}
@@ -14,7 +14,7 @@ The results of the pretrained model after 20 epochs are shown in Figure \ref{fig
         \raisebox{\height}{    
         \begin{tabular}{|c|}
             \hline
-            \textbf{Test Accuracy} \\ \hline
+            \textbf{Test Accuracy using AlexNet} \\ \hline
             93.5\% \\ \hline
         \end{tabular}}}
     \caption{AlexNet results.}
